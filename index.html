@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Unique — AI Job Applications</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>if(typeof pdfjsLib!=='undefined')pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  /* backgrounds */
+  --bg:#06060f;--bg2:#0c0c1e;--bg3:#12122a;--bg4:#181834;--bg5:#1e1e3f;
+  /* borders */
+  --bd:#252548;--bd2:#32326a;
+  /* text */
+  --t:#eeeeff;--t2:#9898c0;--t3:#55557a;
+  /* brand purple */
+  --p:#7c3aed;--p2:#8b5cf6;--p3:#a78bfa;--pbg:#1a0a3e;--plight:#ede9fe;
+  /* teal accent */
+  --ac:#06d6a0;--acbg:#002a1e;--ac2:#34d399;
+  /* amber */
+  --am:#f59e0b;--ambg:#1c1200;
+  /* red */
+  --rd:#f87171;--rdbg:#1c0808;
+  /* blue */
+  --bl:#60a5fa;--blbg:#040e24;
+  /* green */
+  --gn:#4ade80;--gnbg:#052010;
+  /* radius */
+  --r:14px;--rs:8px;--rl:22px;
+  /* font */
+  --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html,body{height:100%;background:var(--bg);color:var(--t);font-family:var(--font);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:99px}
+/* inputs */
+input,textarea,select{background:var(--bg3);border:1.5px solid var(--bd);border-radius:var(--rs);color:var(--t);font-family:var(--font);font-size:14px;padding:11px 14px;width:100%;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+input:focus,textarea:focus,select:focus{border-color:var(--p2);box-shadow:0 0 0 3px rgba(139,92,246,.18)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239898c0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;cursor:pointer}
+select option{background:var(--bg3);color:var(--t)}
+textarea{resize:vertical;min-height:80px}
+/* buttons */
+button{font-family:var(--font);cursor:pointer;outline:none;transition:all .18s;border:none}
+a{color:var(--p3);text-decoration:none}
+a:hover{color:var(--ac2)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg4);padding:2px 7px;border-radius:5px;color:var(--ac2)}
+/* utility */
+.lbl{font-size:11px;color:var(--t3);font-weight:700;margin-bottom:5px;letter-spacing:.08em;text-transform:uppercase;display:block}
+.field{margin-bottom:14px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 1.25rem}
+.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 1.25rem}
+/* cards */
+.card{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);padding:1.5rem}
+.card-hd{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+/* buttons */
+.btn{padding:10px 20px;border-radius:var(--rs);font-weight:600;font-size:14px;border:1.5px solid var(--bd);background:var(--bg3);color:var(--t2);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .18s;white-space:nowrap}
+.btn:hover:not(:disabled){background:var(--bg4);border-color:var(--bd2)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn-p{background:linear-gradient(135deg,var(--p),var(--p2));border-color:var(--p);color:#fff}
+.btn-p:hover:not(:disabled){background:linear-gradient(135deg,#6d28d9,var(--p));box-shadow:0 4px 20px rgba(124,58,237,.35)}
+.btn-ac{background:var(--acbg);border-color:var(--ac);color:var(--ac)}
+.btn-ac:hover:not(:disabled){background:rgba(6,214,160,.15)}
+.btn-rd{background:var(--rdbg);border-color:var(--rd);color:var(--rd)}
+.btn-ghost{background:transparent;border-color:var(--bd);color:var(--t2)}
+.btn-ghost:hover:not(:disabled){background:var(--bg3)}
+.btn-sm{padding:6px 14px;font-size:12px;border-radius:6px}
+.btn-lg{padding:14px 28px;font-size:16px;border-radius:var(--rl)}
+.btn-full{width:100%}
+/* alerts */
+.alert{border-radius:var(--rs);padding:12px 16px;font-size:13px;line-height:1.6;margin-bottom:1rem;display:flex;align-items:flex-start;gap:10px}
+.alert::before{flex-shrink:0;margin-top:1px}
+.alert-e{background:var(--rdbg);border:1.5px solid var(--rd);color:var(--rd)}
+.alert-e::before{content:"⚠"}
+.alert-o{background:var(--gnbg);border:1.5px solid var(--gn);color:var(--gn)}
+.alert-o::before{content:"✓"}
+.alert-i{background:var(--blbg);border:1.5px solid var(--bl);color:var(--bl)}
+.alert-i::before{content:"ℹ"}
+.alert-w{background:var(--ambg);border:1.5px solid var(--am);color:var(--am)}
+.alert-w::before{content:"!"}
+/* badge */
+.badge{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;text-transform:capitalize;display:inline-block}
+/* tab buttons */
+.tb{padding:6px 16px;font-size:12px;border:1.5px solid var(--bd);border-radius:99px;background:var(--bg3);color:var(--t2);cursor:pointer;font-weight:500;transition:all .18s}
+.tb.on{background:var(--p);border-color:var(--p);color:#fff;font-weight:700}
+.tb:hover:not(.on){border-color:var(--bd2);color:var(--t)}
+/* drop zone */
+.drop{border:2px dashed var(--bd2);border-radius:var(--r);padding:2rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg3)}
+.drop:hover,.drop.over{border-color:var(--p2);background:var(--pbg)}
+/* screens */
+.screen{display:none}
+/* nav */
+.topnav{position:fixed;top:0;left:0;right:0;height:64px;background:rgba(6,6,15,.85);border-bottom:1.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;z-index:200;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800;color:var(--t);letter-spacing:-.03em}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--p),var(--p2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 4px 16px rgba(124,58,237,.4)}
+/* hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 4rem;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(124,58,237,.2) 0%,transparent 70%);pointer-events:none;z-index:0}
+.hero-glow2{position:absolute;bottom:0;right:10%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(6,214,160,.1) 0%,transparent 70%);pointer-events:none;z-index:0}
+.hero > *{position:relative;z-index:1}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:7px 18px;background:var(--pbg);border:1.5px solid rgba(139,92,246,.4);border-radius:99px;font-size:12px;color:var(--p3);font-weight:600;margin-bottom:2rem;letter-spacing:.04em}
+.hero-title{font-size:clamp(36px,7vw,76px);font-weight:800;line-height:1.05;margin-bottom:1.5rem;letter-spacing:-.04em}
+.grad{background:linear-gradient(135deg,var(--p3) 0%,var(--ac) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(15px,2vw,19px);color:var(--t2);max-width:580px;margin:0 auto 2.5rem;line-height:1.8}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;max-width:860px;width:100%;margin-top:2rem}
+.feat-card{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);padding:1.5rem;text-align:left;transition:border-color .2s,transform .2s}
+.feat-card:hover{border-color:var(--p2);transform:translateY(-2px)}
+.feat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;background:var(--pbg)}
+/* auth */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--bg)}
+.auth-box{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--rl);padding:2.5rem;width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.otp-row{display:flex;gap:8px;justify-content:center;margin:1.25rem 0}
+.otp-d{width:48px;height:56px;text-align:center;font-size:22px;font-weight:700;border-radius:var(--rs);border:1.5px solid var(--bd);background:var(--bg3);color:var(--t);transition:border-color .2s}
+.otp-d:focus{border-color:var(--p2);box-shadow:0 0 0 3px rgba(139,92,246,.18);outline:none}
+/* onboarding */
+.ob-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:var(--bg)}
+.ob-box{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--rl);padding:2rem;width:100%;max-width:540px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.step-bar{display:flex;gap:6px;justify-content:center;margin-bottom:2rem}
+.sdot{height:4px;border-radius:99px;background:var(--bd);transition:all .35s}
+.sdot.on{background:var(--p2);width:28px}
+.sdot.done{background:var(--ac);width:12px}
+.sdot.idle{width:12px}
+/* app layout */
+#app-layout{display:flex;height:100vh;overflow:hidden}
+#sidebar{width:230px;background:var(--bg2);border-right:1.5px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+#main-area{flex:1;overflow-y:auto;background:var(--bg)}
+.nb{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;border:none;border-left:2.5px solid transparent;background:transparent;color:var(--t3);cursor:pointer;text-align:left;font-size:13px;font-weight:500;transition:all .15s;font-family:var(--font)}
+.nb.on{border-left-color:var(--p2);background:rgba(139,92,246,.08);color:var(--t);font-weight:600}
+.nb:hover:not(.on){color:var(--t2);background:rgba(255,255,255,.03)}
+.nb-icon{font-size:16px;width:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* section */
+.sec{padding:2rem;max-width:1200px}
+.sec-h{font-size:24px;font-weight:800;color:var(--t);margin-bottom:4px;letter-spacing:-.03em}
+.sec-s{font-size:13px;color:var(--t3);margin-bottom:1.75rem}
+/* usage bar */
+.ubar{height:5px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-top:5px}
+.ufill{height:100%;border-radius:99px;transition:width .5s ease}
+/* stat cards */
+.stat{background:var(--bg3);border:1.5px solid var(--bd);border-radius:var(--r);padding:1rem 1.25rem}
+/* pricing */
+.pw{min-height:100vh;padding:6rem 1.5rem 4rem;display:flex;flex-direction:column;align-items:center;background:var(--bg)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;max-width:940px;width:100%;margin-top:2.5rem}
+.plan{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);padding:2rem;position:relative;transition:border-color .2s,transform .2s}
+.plan:hover{border-color:var(--bd2);transform:translateY(-2px)}
+.plan.pop{border-color:var(--p2);box-shadow:0 0 60px rgba(124,58,237,.2)}
+.pop-l{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-size:11px;font-weight:700;padding:4px 16px;border-radius:99px;white-space:nowrap;letter-spacing:.04em}
+.plan-li{list-style:none;margin-bottom:2rem;display:flex;flex-direction:column;gap:10px}
+.plan-li li{font-size:13px;color:var(--t2);display:flex;align-items:flex-start;gap:8px}
+.plan-li li::before{content:'✓';color:var(--ac);font-weight:700;flex-shrink:0;margin-top:1px}
+/* upgrade modal */
+#upg-modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:9000;padding:1rem;backdrop-filter:blur(8px)}
+/* output */
+.out-card{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);padding:1.25rem;margin-bottom:12px;transition:border-color .2s}
+.out-card:hover{border-color:var(--bd2)}
+.out-hdr{display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;gap:12px}
+.out-body{font-size:13px;color:var(--t2);line-height:1.85;white-space:pre-wrap;border-top:1.5px solid var(--bd);padding-top:12px;margin-top:12px}
+.kw-tag{padding:3px 10px;background:var(--pbg);color:var(--p3);border-radius:99px;font-size:11px;border:1.5px solid rgba(139,92,246,.3);display:inline-block;margin:2px;font-weight:500}
+/* chat */
+.chat-box{height:220px;overflow-y:auto;background:var(--bg3);border:1.5px solid var(--bd);border-radius:var(--rs);padding:12px;margin-bottom:1rem;display:flex;flex-direction:column;gap:8px}
+.cb{max-width:88%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;white-space:pre-wrap}
+.cb-u{background:var(--pbg);border:1.5px solid rgba(139,92,246,.4);color:var(--p3);align-self:flex-end;margin-left:auto;border-bottom-right-radius:4px}
+.cb-a{background:var(--bg4);border:1.5px solid var(--bd);color:var(--t);border-bottom-left-radius:4px}
+/* app rows */
+.app-row{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;transition:all .18s}
+.app-row:hover,.app-row.sel{border-color:var(--p2);background:rgba(139,92,246,.05)}
+/* slider */
+input[type=range]{-webkit-appearance:none;appearance:none;height:5px;border-radius:99px;background:var(--bg4);outline:none;border:none;padding:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--p2));cursor:pointer;box-shadow:0 2px 8px rgba(124,58,237,.4)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--p2));cursor:pointer;border:none}
+/* credits badge */
+.cr-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:var(--pbg);border:1.5px solid rgba(139,92,246,.4);border-radius:99px;font-size:12px;font-weight:700;color:var(--p3)}
+.cr-badge.low{background:var(--ambg);border-color:var(--am);color:var(--am)}
+.cr-badge.empty{background:var(--rdbg);border-color:var(--rd);color:var(--rd)}
+/* mobile */
+@media(max-width:768px){
+  #sidebar{display:none}.feat-grid,.pgrid{grid-template-columns:1fr}
+  .f2,.f3{grid-template-columns:1fr}
+  #app-layout{flex-direction:column}
+  #main-area{height:calc(100vh - 60px);overflow-y:auto}
+  .mobile-nav{display:flex!important}
+  .sec{padding:1rem}
+}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1.5px solid var(--bd);z-index:100;padding:8px 0 env(safe-area-inset-bottom)}
+.mobile-nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;color:var(--t3);font-size:10px;font-weight:500;cursor:pointer;background:none;border:none;font-family:var(--font);transition:color .18s}
+.mobile-nb.on{color:var(--p3)}
+.mobile-nb-icon{font-size:20px}
+/* loading */
+.spin{display:inline-block;animation:spin 1s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+/* scrollbar */
+.slim-scroll::-webkit-scrollbar{width:3px}
+/* glass effect for modals */
+.glass{background:rgba(12,12,30,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LANDING ═══════════ -->
+<div id="pg-land" class="screen" style="min-height:100vh">
+  <nav class="topnav">
+    <div class="logo"><div class="logo-mark">U</div>Unique</div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-ghost btn-sm" onclick="showAuth('login')">Sign in</button>
+      <button class="btn btn-p btn-sm" onclick="showAuth('signup')">Start free</button>
+    </div>
+  </nav>
+  <div class="hero">
+    <div class="hero-glow"></div><div class="hero-glow2"></div>
+    <div class="hero-tag">✦ AI-powered · Works on any device · Zero setup</div>
+    <h1 class="hero-title">Apply to 100+ jobs<br/><span class="grad">while you sleep.</span></h1>
+    <p class="hero-sub">Upload your CV, set your preferences, and our AI agent applies to matching jobs on LinkedIn automatically. You just check your interviews.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:3rem">
+      <button class="btn btn-p btn-lg" onclick="showAuth('signup')">Get 3 free applications</button>
+      <button class="btn btn-ghost btn-lg" onclick="pg('pg-price')">View pricing</button>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">📄</div><div style="font-size:15px;font-weight:700;color:var(--t);margin-bottom:6px">Upload your CV</div><div style="font-size:13px;color:var(--t3);line-height:1.6">PDF or Word. AI reads it in seconds and fills your entire profile automatically.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:var(--acbg)">🤖</div><div style="font-size:15px;font-weight:700;color:var(--t);margin-bottom:6px">Agent applies for you</div><div style="font-size:13px;color:var(--t3);line-height:1.6">Set your schedule. The agent logs into LinkedIn and applies only to jobs you'd actually want.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:var(--gnbg)">📊</div><div style="font-size:15px;font-weight:700;color:var(--t);margin-bottom:6px">Track everything</div><div style="font-size:13px;color:var(--t3);line-height:1.6">Every application syncs to your dashboard. Update statuses, add notes, see the full picture.</div></div>
+    </div>
+    <div style="margin-top:3.5rem;text-align:center"><div style="font-size:11px;color:var(--t3);letter-spacing:.1em;font-weight:600;margin-bottom:1.25rem">TRUSTED FOR APPLICATIONS AT</div><div style="display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;opacity:.25;font-size:14px;font-weight:700;color:var(--t)"><span>Google</span><span>Deloitte</span><span>KPMG</span><span>Revolut</span><span>Meta</span><span>Stripe</span><span>Amazon</span><span>PwC</span></div></div>
+  </div>
+</div>
+
+<!-- ═══════════ AUTH ═══════════ -->
+<div id="pg-auth" class="screen" style="min-height:100vh">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div style="text-align:center;margin-bottom:2rem">
+        <div class="logo-mark" style="margin:0 auto 14px;width:40px;height:40px;font-size:20px"></div>
+        <div id="auth-title" style="font-size:22px;font-weight:800;color:var(--t);letter-spacing:-.02em">Create your account</div>
+        <div id="auth-sub" style="font-size:13px;color:var(--t3);margin-top:5px">3 free applications · no credit card</div>
+      </div>
+      <!-- Step 1 -->
+      <div id="a1">
+        <div id="a1-err" class="alert alert-e" style="display:none"></div>
+        <div id="a-name-f" class="field"><span class="lbl">Full name</span><input type="text" id="a-name" placeholder="Jane Doe" autocomplete="name"/></div>
+        <div class="field"><span class="lbl">Email address</span><input type="email" id="a-email" placeholder="you@example.com" autocomplete="email"/></div>
+        <div class="field"><span class="lbl">Password</span><input type="password" id="a-pass" placeholder="At least 8 characters" autocomplete="new-password" onkeydown="if(event.key==='Enter')aNext()"/></div>
+        <button class="btn btn-p btn-full btn-lg" onclick="aNext()" style="margin-bottom:1rem">Continue →</button>
+        <div id="a-toggle" style="text-align:center;font-size:13px;color:var(--t3)">Have an account? <span style="color:var(--p3);cursor:pointer;font-weight:600" onclick="toggleMode()">Sign in</span></div>
+      </div>
+      <!-- Step 2: Phone -->
+      <div id="a2" style="display:none">
+        <div class="alert alert-i" style="margin-bottom:1rem">📱 One account per phone number — prevents abuse and keeps the platform fair.</div>
+        <div id="a2-err" class="alert alert-e" style="display:none"></div>
+        <div class="field">
+          <span class="lbl">Phone number</span>
+          <div style="display:flex;gap:8px">
+            <select id="a-cc" style="width:110px;flex-shrink:0">
+              <option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option>
+              <option value="+48" selected>🇵🇱 +48</option><option value="+49">🇩🇪 +49</option>
+              <option value="+33">🇫🇷 +33</option><option value="+34">🇪🇸 +34</option>
+              <option value="+39">🇮🇹 +39</option><option value="+31">🇳🇱 +31</option>
+              <option value="+46">🇸🇪 +46</option><option value="+47">🇳🇴 +47</option>
+              <option value="+380">🇺🇦 +380</option><option value="+7">🇷🇺 +7</option>
+              <option value="+27">🇿🇦 +27</option><option value="+234">🇳🇬 +234</option>
+              <option value="+254">🇰🇪 +254</option><option value="+250">🇷🇼 +250</option>
+              <option value="+91">🇮🇳 +91</option><option value="+55">🇧🇷 +55</option>
+              <option value="+52">🇲🇽 +52</option><option value="+61">🇦🇺 +61</option>
+              <option value="+971">🇦🇪 +971</option><option value="+966">🇸🇦 +966</option>
+            </select>
+            <input type="tel" id="a-phone" placeholder="700 000 000" autocomplete="tel" style="flex:1" inputmode="numeric"/>
+          </div>
+          <div style="font-size:11px;color:var(--t3);margin-top:5px">No leading zero · e.g. 700 123 456</div>
+        </div>
+        <div id="recaptcha-container" style="margin:12px 0"></div>
+        <button class="btn btn-p btn-full" id="send-btn" onclick="sendSMS()" style="padding:12px">Send verification code</button>
+        <div style="text-align:center;margin-top:1rem"><span style="color:var(--p3);cursor:pointer;font-size:13px" onclick="back1()">← Change email</span></div>
+      </div>
+      <!-- Step 3: OTP -->
+      <div id="a3" style="display:none">
+        <div id="a3-err" class="alert alert-e" style="display:none"></div>
+        <div style="text-align:center;margin-bottom:1.5rem">
+          <div style="font-size:36px;margin-bottom:12px">📲</div>
+          <div style="font-size:16px;font-weight:700;color:var(--t);margin-bottom:4px">Enter the 6-digit code</div>
+          <div id="sent-to" style="font-size:13px;color:var(--t3)">Sent to your number</div>
+        </div>
+        <div class="otp-row" id="otp-row">
+          <input class="otp-d" maxlength="1" type="tel" inputmode="numeric"/>
+          <input class="otp-d" maxlength="1" type="tel" inputmode="numeric"/>
+          <input class="otp-d" maxlength="1" type="tel" inputmode="numeric"/>
+          <input class="otp-d" maxlength="1" type="tel" inputmode="numeric"/>
+          <input class="otp-d" maxlength="1" type="tel" inputmode="numeric"/>
+          <input class="otp-d" maxlength="1" type="tel" inputmode="numeric"/>
+        </div>
+        <button class="btn btn-p btn-full" id="verify-btn" onclick="verifyOTP()" style="padding:12px">Verify &amp; create account</button>
+        <div style="text-align:center;font-size:13px;color:var(--t3);margin-top:1rem">
+          Didn't get it? <span style="color:var(--p3);cursor:pointer" onclick="resendSMS()">Resend</span> · <span style="color:var(--p3);cursor:pointer" onclick="back2()">Change number</span>
+        </div>
+      </div>
+      <!-- Login -->
+      <div id="a-login" style="display:none">
+        <div id="login-err" class="alert alert-e" style="display:none"></div>
+        <div class="field"><span class="lbl">Email address</span><input type="email" id="l-email" placeholder="you@example.com" autocomplete="email"/></div>
+        <div class="field"><span class="lbl">Password</span><input type="password" id="l-pass" placeholder="Your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <button class="btn btn-p btn-full" id="login-btn" onclick="doLogin()" style="padding:12px;margin-bottom:1rem">Sign in</button>
+        <div style="text-align:center;font-size:13px;color:var(--t3)">New here? <span style="color:var(--p3);cursor:pointer;font-weight:600" onclick="toggleMode()">Create account</span></div>
+      </div>
+      <div style="text-align:center;margin-top:1.5rem"><span style="color:var(--p3);cursor:pointer;font-size:13px" onclick="pg('pg-land')">← Back to home</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ONBOARDING ═══════════ -->
+<div id="pg-ob" class="screen" style="min-height:100vh">
+  <div class="ob-wrap">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div class="logo-mark" style="margin:0 auto 12px;width:36px;height:36px;font-size:18px"></div>
+      <div id="ob-title" style="font-size:20px;font-weight:800;color:var(--t);letter-spacing:-.02em"></div>
+      <div id="ob-hint" style="font-size:13px;color:var(--t3);margin-top:4px"></div>
+    </div>
+    <div id="ob-dots" class="step-bar"></div>
+    <div class="ob-box">
+      <div id="ob-body"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1.25rem;border-top:1.5px solid var(--bd)">
+        <button class="btn btn-ghost btn-sm" id="ob-back" onclick="obBack()">← Back</button>
+        <button class="btn btn-p" id="ob-next" onclick="obNext()" style="padding:10px 24px">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ APP ═══════════ -->
+<div id="pg-app" class="screen" style="min-height:0">
+  <div id="app-layout">
+    <!-- Desktop Sidebar -->
+    <div id="sidebar">
+      <div style="padding:1.25rem 1rem;border-bottom:1.5px solid var(--bd)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <div class="logo-mark" style="width:26px;height:26px;font-size:13px;border-radius:7px"></div>
+          <div style="font-size:9px;font-family:var(--mono);color:var(--t3);letter-spacing:.16em;font-weight:700">UNIQUE</div>
+        </div>
+        <div id="sb-name" style="font-size:14px;font-weight:700;color:var(--t);line-height:1.3"></div>
+        <div id="sb-phone" style="font-size:11px;color:var(--t3);margin-top:2px"></div>
+        <div id="sb-credits" style="margin-top:8px"></div>
+      </div>
+      <div id="sb-usage" style="padding:.75rem 1rem;border-bottom:1.5px solid var(--bd)"></div>
+      <nav style="flex:1;padding-top:6px" id="sb-nav">
+        <button class="nb on" data-t="dash"><span class="nb-icon">◈</span>Dashboard</button>
+        <button class="nb" data-t="profile"><span class="nb-icon">◉</span>My Profile</button>
+        <button class="nb" data-t="prefs"><span class="nb-icon">⊞</span>Job Preferences</button>
+        <button class="nb" data-t="gen"><span class="nb-icon">✦</span>Apply to Job</button>
+        <button class="nb" data-t="apps"><span class="nb-icon">◎</span>Applications</button>
+        <button class="nb" data-t="agent"><span class="nb-icon">🤖</span>Auto Agent</button>
+        <button class="nb" data-t="contact"><span class="nb-icon">💬</span>Contact Support</button>
+        <button class="nb" data-t="acct"><span class="nb-icon">⚙</span>Account</button>
+      </nav>
+      <div style="padding:1rem;border-top:1.5px solid var(--bd)">
+        <button class="btn btn-p btn-sm btn-full" style="margin-bottom:8px" onclick="pg('pg-price')">⬆ Buy credits</button>
+        <button class="btn btn-ghost btn-sm btn-full" style="color:var(--t3)" onclick="doSignOut()">Sign out</button>
+      </div>
+    </div>
+    <div id="main-area" class="slim-scroll"></div>
+  </div>
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav" id="mob-nav">
+    <button class="mobile-nb on" data-t="dash"><div class="mobile-nb-icon">◈</div>Home</button>
+    <button class="mobile-nb" data-t="apps"><div class="mobile-nb-icon">◎</div>Apps</button>
+    <button class="mobile-nb" data-t="gen"><div class="mobile-nb-icon">✦</div>Apply</button>
+    <button class="mobile-nb" data-t="agent"><div class="mobile-nb-icon">🤖</div>Agent</button>
+    <button class="mobile-nb" data-t="acct"><div class="mobile-nb-icon">⚙</div>Account</button>
+  </nav>
+</div>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<div id="pg-price" class="screen" style="min-height:100vh">
+  <nav class="topnav">
+    <div class="logo"><div class="logo-mark">U</div>Unique</div>
+    <button class="btn btn-ghost btn-sm" onclick="goBack()">← Back</button>
+  </nav>
+  <div class="pw">
+    <div style="text-align:center;max-width:580px">
+      <div style="font-size:11px;font-weight:700;color:var(--p3);letter-spacing:.1em;margin-bottom:12px">PRICING</div>
+      <h2 style="font-size:clamp(28px,4vw,52px);font-weight:800;line-height:1.05;margin-bottom:12px;letter-spacing:-.03em">Credits. No subscriptions.</h2>
+      <p style="font-size:16px;color:var(--t2);line-height:1.7">Buy once, use anytime. Credits never expire. The more you buy, the cheaper each application gets.</p>
+    </div>
+    <div class="pgrid">
+      <div class="plan">
+        <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px">Starter</div>
+        <div style="font-size:46px;font-weight:800;color:var(--t);line-height:1;margin-bottom:4px">Free</div>
+        <div style="font-size:13px;color:var(--t3);margin-bottom:1.75rem">3 credits on signup · phone verified</div>
+        <ul class="plan-li"><li>3 AI-powered applications</li><li>PDF &amp; DOCX CV import</li><li>Cover letter generator</li><li>Interview prep chat</li><li>Application tracker</li></ul>
+        <button class="btn btn-full" onclick="showAuth('signup')" style="padding:12px">Get started free</button>
+      </div>
+      <div class="plan pop">
+        <div class="pop-l">BEST VALUE</div>
+        <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px">Standard</div>
+        <div style="font-size:46px;font-weight:800;color:var(--t);line-height:1;margin-bottom:4px">€7</div>
+        <div style="font-size:13px;color:var(--t3);margin-bottom:4px">50 application credits</div>
+        <div style="font-size:12px;color:var(--p3);margin-bottom:1.75rem;font-weight:700">€0.14 per application</div>
+        <ul class="plan-li"><li>50 AI applications</li><li>Auto agent + scheduling</li><li>AI match scoring</li><li>Credits never expire</li></ul>
+        <button class="btn btn-p btn-full" onclick="checkout('p50')" style="padding:12px">Buy 50 credits — €7</button>
+      </div>
+      <div class="plan">
+        <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px">Pro Pack</div>
+        <div style="font-size:46px;font-weight:800;color:var(--t);line-height:1;margin-bottom:4px">€10</div>
+        <div style="font-size:13px;color:var(--t3);margin-bottom:4px">120 application credits</div>
+        <div style="font-size:12px;color:var(--p3);margin-bottom:1.75rem;font-weight:700">€0.08 per application</div>
+        <ul class="plan-li"><li>120 AI applications</li><li>Auto agent + scheduling</li><li>Priority AI generation</li><li>Credits never expire</li></ul>
+        <button class="btn btn-full" onclick="checkout('p120')" style="padding:12px">Buy 120 credits — €10</button>
+      </div>
+    </div>
+    <div style="background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);padding:2rem;max-width:940px;width:100%;margin-top:1.25rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.25rem">
+        <div>
+          <div style="font-size:16px;font-weight:700;color:var(--t);margin-bottom:6px">🎯 Custom Pack — More Apps, Lower Price</div>
+          <div style="font-size:13px;color:var(--t2)">Need more than 120? Slide to see your price.</div>
+        </div>
+        <div style="min-width:300px;flex:1;max-width:450px">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <input type="range" id="cslider" min="121" max="1000" step="1" value="200" oninput="calcCustom()" style="flex:1"/>
+            <span id="ccount" style="font-size:16px;font-weight:700;color:var(--p3);min-width:70px;text-align:right">200 apps</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><span id="cprice" style="font-size:30px;font-weight:800;color:var(--t)">€14</span><span id="cper" style="font-size:12px;color:var(--t3);margin-left:8px">€0.07/app</span></div>
+            <button class="btn btn-p" id="cbtn" onclick="checkout('custom')" style="padding:10px 20px">Buy 200 — €14</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap;padding-top:1rem;border-top:1.5px solid var(--bd)">
+        <div style="font-size:12px;color:var(--t3)">121–300 apps · <span style="color:var(--p3);font-weight:600">€0.07/app</span></div>
+        <div style="font-size:12px;color:var(--t3)">301–600 apps · <span style="color:var(--p3);font-weight:600">€0.06/app</span></div>
+        <div style="font-size:12px;color:var(--t3)">601–1000 apps · <span style="color:var(--p3);font-weight:600">€0.05/app</span></div>
+      </div>
+    </div>
+    <div style="margin-top:2rem;font-size:13px;color:var(--t3);text-align:center">Credits never expire · Secure checkout via Stripe · Questions? <a href="mailto:rwandatacenter@gmail.com">rwandatacenter@gmail.com</a></div>
+  </div>
+</div>
+
+<!-- ═══════════ UPGRADE MODAL ═══════════ -->
+<div id="upg-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);align-items:center;justify-content:center;z-index:9000;padding:1rem;backdrop-filter:blur(10px)">
+  <div class="glass" style="border:1.5px solid var(--p);border-radius:var(--rl);padding:2.5rem;max-width:400px;width:100%;text-align:center">
+    <div style="font-size:48px;margin-bottom:16px">⚡</div>
+    <h3 style="font-size:22px;font-weight:800;color:var(--t);margin-bottom:8px;letter-spacing:-.02em">You're out of credits</h3>
+    <p style="font-size:14px;color:var(--t2);margin-bottom:2rem;line-height:1.7">Buy more credits to keep applying. Credits never expire.</p>
+    <button class="btn btn-p btn-lg btn-full" style="margin-bottom:10px" onclick="checkout('p50')">Buy 50 credits — €7</button>
+    <button class="btn btn-lg btn-full" style="margin-bottom:10px;border-color:var(--bd2)" onclick="checkout('p120')">Buy 120 credits — €10</button>
+    <button class="btn btn-ghost btn-sm btn-full" style="margin-top:4px;color:var(--t3)" onclick="$('upg-modal').style.display='none'">Maybe later</button>
+  </div>
+</div>
+
+<!-- ═══════════ ADMIN ═══════════ -->
+<div id="pg-admin" class="screen" style="min-height:100vh">
+  <nav class="topnav">
+    <div class="logo"><div class="logo-mark">U</div>Admin</div>
+    <button class="btn btn-ghost btn-sm" onclick="doSignOut()">Sign out</button>
+  </nav>
+  <div style="padding:5rem 2rem 2rem;max-width:1060px;margin:0 auto">
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:4px;letter-spacing:-.03em">Platform</h2>
+    <p style="color:var(--t3);margin-bottom:2rem">Live Firebase data</p>
+    <div id="adm-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem"></div>
+    <div class="card" id="adm-users" style="margin-bottom:1.5rem"></div>
+    <div class="card" id="adm-msgs" style="margin-bottom:1.5rem"></div>
+    <div class="card" style="margin-bottom:1.5rem">
+      <div class="card-hd">PLATFORM CONFIG</div>
+      <div class="f2">
+        <div>
+          <div class="field"><span class="lbl">Cloudflare Worker URL</span><input type="text" id="adm-proxy" placeholder="https://unique-ai.name.workers.dev"/></div>
+          <div class="field"><span class="lbl">Stripe — 50 credits €7</span><input type="text" id="adm-p50" placeholder="https://buy.stripe.com/…"/></div>
+        </div>
+        <div>
+          <div class="field"><span class="lbl">Stripe — 120 credits €10</span><input type="text" id="adm-p120" placeholder="https://buy.stripe.com/…"/></div>
+          <div class="field"><span class="lbl">Stripe — Custom pack</span><input type="text" id="adm-pcustom" placeholder="https://buy.stripe.com/…"/></div>
+        </div>
+      </div>
+      <div class="field"><span class="lbl">Announcement (shown on dashboard)</span><input type="text" id="adm-msg" placeholder="e.g. New feature: AI match scoring live!"/></div>
+      <button class="btn btn-p" onclick="saveAdmCfg()">Save Configuration</button>
+      <span id="adm-ok" style="margin-left:12px;font-size:13px;color:var(--gn);display:none">✓ Saved!</span>
+    </div>
+    <div class="card">
+      <div class="card-hd">GRANT CREDITS</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input type="email" id="adm-uemail" placeholder="user@example.com" style="flex:1;min-width:200px"/>
+        <input type="number" id="adm-ucredits" placeholder="Credits to add" style="width:150px"/>
+        <button class="btn btn-p" onclick="grantCredits()">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// FIREBASE CONFIG
+// ═══════════════════════════════════════════════════════════════
+const FB_CFG = {
+  apiKey:"AIzaSyDlBlBeSzeEkO9vfkjLNMuXXlqD4FgOYgE",
+  authDomain:"unique-agent-8325d.firebaseapp.com",
+  databaseURL:"https://unique-agent-8325d-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"unique-agent-8325d",
+  storageBucket:"unique-agent-8325d.firebasestorage.app",
+  messagingSenderId:"82561999137",
+  appId:"1:82561999137:web:8ab5527bc00b7afd3b5e60"
+};
+const ADMIN = "rwandatacenter@gmail.com";
+const FREE_CREDITS = 3;
+
+firebase.initializeApp(FB_CFG);
+const auth = firebase.auth();
+const db   = firebase.database();
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let U = {
+  user:null, data:null, cfg:{},
+  tab:"dash", ptab:"cv",
+  fst:"all", fsq:"",
+  genOut:null, chat:[],
+  selApp:null
+};
+let confirmResult=null, rcv=null, signupTmp={};
+let agentPollTimer = null;
+
+// ═══════════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+
+function pg(id) {
+  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+  $(id).style.display = 'block';
+}
+
+function goBack() { U.user ? openApp() : pg('pg-land'); }
+
+function mk(tag, props, ...children) {
+  const e = document.createElement(tag);
+  if (props) Object.entries(props).forEach(([k,v]) => {
+    if (k === 'cls')  e.className = v;
+    else if (k === 'css') e.style.cssText = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k === 'txt') e.textContent = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  });
+  children.flat(Infinity).forEach(c => {
+    if (c == null) return;
+    e.appendChild(typeof c === 'string' || typeof c === 'number'
+      ? document.createTextNode(c) : c);
+  });
+  return e;
+}
+
+function fld(label, value, onChange, opts={}) {
+  const w = mk('div', {cls:'field'});
+  if (label) w.appendChild(mk('span', {cls:'lbl', txt:label}));
+  let inp;
+  if (opts.rows) {
+    inp = mk('textarea', {rows:opts.rows, placeholder:opts.ph||'',  value:value||''});
+    inp.value = value || '';
+    inp.addEventListener('change', e => onChange(e.target.value));
+  } else if (opts.type === 'password') {
+    inp = mk('input', {type:'password', placeholder:opts.ph||''});
+    inp.value = value || '';
+    inp.addEventListener('change', e => onChange(e.target.value));
+  } else if (opts.opts) {
+    inp = mk('select');
+    opts.opts.forEach(([v,l]) => {
+      const o = mk('option', {value:v, txt:l});
+      if (v === (value || opts.def)) o.selected = true;
+      inp.appendChild(o);
+    });
+    inp.addEventListener('change', e => onChange(e.target.value));
+  } else {
+    inp = mk('input', {type:opts.type||'text', placeholder:opts.ph||''});
+    inp.value = value || '';
+    inp.addEventListener('change', e => onChange(e.target.value));
+  }
+  w.appendChild(inp);
+  if (opts.help) w.appendChild(mk('div', {css:'font-size:11px;color:var(--t3);margin-top:4px', txt:opts.help}));
+  return w;
+}
+
+function sbadge(status) {
+  const m = {
+    applied:   {bg:'#0e1535',c:'#60a5fa',b:'#1a2560'},
+    interview: {bg:'#052010',c:'#4ade80',b:'#0a4020'},
+    offer:     {bg:'#1c1200',c:'#f59e0b',b:'#4a3000'},
+    rejected:  {bg:'#1c0808',c:'#f87171',b:'#4a1010'},
+    pending:   {bg:'#12122a',c:'#9898c0',b:'#252548'}
+  };
+  const s = m[status] || m.pending;
+  const sp = mk('span', {cls:'badge'});
+  sp.style.cssText = `background:${s.bg};color:${s.c};border:1.5px solid ${s.b}`;
+  sp.textContent = status;
+  return sp;
+}
+
+function cpbtn(text) {
+  const b = mk('button', {cls:'btn btn-sm', txt:'Copy'});
+  b.onclick = () => {
+    navigator.clipboard.writeText(text);
+    b.textContent = '✓ Copied';
+    setTimeout(() => b.textContent = 'Copy', 2000);
+  };
+  return b;
+}
+
+function dropzone(accept, onFile) {
+  const wrap = mk('div');
+  const dz = mk('div', {cls:'drop'});
+  dz.innerHTML = '<div style="font-size:36px;margin-bottom:10px">📄</div><div style="font-size:15px;font-weight:700;color:var(--t2);margin-bottom:4px">Drop your CV or tap to upload</div><div style="font-size:12px;color:var(--t3)">PDF, DOCX, or .txt</div>';
+  const fi = mk('input', {type:'file', accept, css:'display:none'});
+  fi.onchange = e => { const f = e.target.files[0]; if (f) onFile(f); };
+  dz.onclick = () => fi.click();
+  dz.ondragover = e => { e.preventDefault(); dz.classList.add('over'); };
+  dz.ondragleave = () => dz.classList.remove('over');
+  dz.ondrop = e => {
+    e.preventDefault(); dz.classList.remove('over');
+    const f = e.dataTransfer.files[0];
+    if (f) { const dt = new DataTransfer(); dt.items.add(f); fi.files = dt.files; fi.onchange({target:fi}); }
+  };
+  wrap.appendChild(dz); wrap.appendChild(fi);
+  return wrap;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FIREBASE HELPERS
+// ═══════════════════════════════════════════════════════════════
+async function getUser(uid) {
+  const s = await db.ref('users/'+uid).get();
+  return s.exists() ? s.val() : null;
+}
+
+async function saveUser(data) {
+  await db.ref('users/'+U.user.uid).update(data);
+  U.data = Object.assign(U.data || {}, data);
+}
+
+async function loadCfg() {
+  try {
+    const s = await db.ref('platform_config').get();
+    if (s.exists()) U.cfg = s.val() || {};
+  } catch(e) { U.cfg = {}; }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AI CALL
+// ═══════════════════════════════════════════════════════════════
+async function callAI(messages, system) {
+  const url = U.cfg.proxyUrl;
+  if (!url) throw new Error('AI not configured. Please contact support.');
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','x-user-id':U.user.uid},
+    body: JSON.stringify({messages, system})
+  });
+  if (!r.ok) throw new Error('AI request failed ('+r.status+'). Please try again.');
+  const d = await r.json();
+  if (d.error) throw new Error(d.error);
+  return d.content || '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CREDITS
+// ═══════════════════════════════════════════════════════════════
+function getCredits() {
+  if (!U.data) return 0;
+  return Math.max(0, FREE_CREDITS + (U.data.purchasedCredits||0) - (U.data.appsUsed||0));
+}
+
+async function useCredit() {
+  await saveUser({appsUsed: (U.data.appsUsed||0)+1});
+  updateSidebarCredits();
+}
+
+function checkCredits() {
+  if (getCredits() <= 0) { $('upg-modal').style.display='flex'; return false; }
+  return true;
+}
+
+function calcCustom() {
+  const n = parseInt($('cslider').value);
+  let price, per;
+  if (n <= 300)      { price = Math.ceil(n*0.07); per = 0.07; }
+  else if (n <= 600) { price = Math.ceil(n*0.06); per = 0.06; }
+  else               { price = Math.ceil(n*0.05); per = 0.05; }
+  $('ccount').textContent = n + ' apps';
+  $('cprice').textContent = '€' + price;
+  $('cper').textContent   = '€' + per.toFixed(2) + '/app';
+  $('cbtn').textContent   = 'Buy ' + n + ' — €' + price;
+}
+
+function checkout(pack) {
+  const links = { p50: U.cfg.stripeP50, p120: U.cfg.stripeP120, custom: U.cfg.stripeCustom };
+  const url = links[pack];
+  if (!url) { alert('Payment not set up yet. Contact rwandatacenter@gmail.com'); return; }
+  window.open(url + (U.user?.email ? '?prefilled_email='+encodeURIComponent(U.user.email) : ''), '_blank');
+  const msg = mk('div', {css:'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gnbg);border:1.5px solid var(--gn);color:var(--gn);padding:12px 24px;border-radius:var(--r);font-size:13px;font-weight:600;z-index:9999;white-space:nowrap', txt:'✓ Payment page opened! Credits added after payment.'});
+  document.body.appendChild(msg);
+  setTimeout(() => msg.remove(), 5000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════════
+let authMode = 'signup';
+
+function showAuth(mode) {
+  authMode = mode;
+  pg('pg-auth');
+  $('a1').style.display = mode==='signup' ? 'block' : 'none';
+  $('a2').style.display = 'none';
+  $('a3').style.display = 'none';
+  $('a-login').style.display = mode==='login' ? 'block' : 'none';
+  $('a-name-f').style.display = mode==='signup' ? 'block' : 'none';
+  $('auth-title').textContent = mode==='login' ? 'Welcome back' : 'Create your account';
+  $('auth-sub').textContent   = mode==='login' ? 'Sign in to your account' : '3 free applications · no credit card';
+  $('a1-err').style.display = 'none';
+  $('login-err').style.display = 'none';
+}
+
+function toggleMode() { showAuth(authMode==='login' ? 'signup' : 'login'); }
+function back1() { $('a2').style.display='none'; $('a1').style.display='block'; $('auth-title').textContent='Create your account'; }
+function back2() { $('a3').style.display='none'; $('a2').style.display='block'; }
+
+function aNext() {
+  const name = $('a-name').value.trim();
+  const email = $('a-email').value.trim();
+  const pass = $('a-pass').value;
+  $('a1-err').style.display = 'none';
+  if (authMode==='signup' && !name) { showErr('a1-err','Please enter your full name.'); return; }
+  if (!email || !email.includes('@')) { showErr('a1-err','Please enter a valid email.'); return; }
+  if (!pass || pass.length < 8) { showErr('a1-err','Password must be at least 8 characters.'); return; }
+  signupTmp = {name, email, pass};
+  $('a1').style.display = 'none';
+  $('a2').style.display = 'block';
+  $('auth-title').textContent = 'Verify your phone';
+  $('auth-sub').textContent   = 'One account per phone number';
+  if (!rcv) {
+    rcv = new firebase.auth.RecaptchaVerifier('recaptcha-container', {size:'normal', callback:()=>{}});
+    rcv.render().catch(() => {});
+  }
+}
+
+function showErr(id, msg) {
+  const el = $(id);
+  if (el) { el.querySelector('*') ? el.innerHTML = '<span>'+msg+'</span>' : el.textContent = msg; el.style.display = 'flex'; }
+}
+
+async function sendSMS() {
+  const cc  = $('a-cc').value;
+  const num = $('a-phone').value.replace(/\s/g,'').replace(/^0+/,'');
+  const phone = cc + num;
+  $('a2-err').style.display = 'none';
+  if (num.length < 5) { showErr('a2-err','Please enter a valid phone number.'); return; }
+  const btn = $('send-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    // Check if phone already used
+    const snap = await db.ref('phones/'+phone.replace(/\+/g,'_')).get();
+    if (snap.exists()) {
+      showErr('a2-err','This phone is already registered. Each phone can only be used once.');
+      btn.disabled=false; btn.textContent='Send verification code';
+      return;
+    }
+    signupTmp.phone = phone;
+    confirmResult = await auth.signInWithPhoneNumber(phone, rcv);
+    $('sent-to').textContent = 'Sent to ' + phone;
+    $('a2').style.display = 'none';
+    $('a3').style.display = 'block';
+    $('auth-title').textContent = 'Enter the code';
+    setupOTP();
+    setTimeout(() => document.querySelectorAll('.otp-d')[0]?.focus(), 150);
+  } catch(e) {
+    showErr('a2-err', 'Error: ' + e.message.replace('Firebase: ',''));
+    btn.disabled=false; btn.textContent='Send verification code';
+    if (rcv) { try { rcv.clear(); } catch{} rcv=null; $('recaptcha-container').innerHTML=''; }
+  }
+}
+
+function resendSMS() {
+  $('a3').style.display='none'; $('a2').style.display='block';
+  if (rcv) { try { rcv.clear(); } catch{} rcv=null; }
+  $('recaptcha-container').innerHTML = '';
+  rcv = new firebase.auth.RecaptchaVerifier('recaptcha-container', {size:'normal'});
+  rcv.render().catch(()=>{});
+  $('send-btn').disabled=false; $('send-btn').textContent='Send verification code';
+}
+
+function setupOTP() {
+  const inputs = document.querySelectorAll('.otp-d');
+  inputs.forEach((inp, i) => {
+    inp.value = '';
+    inp.oninput = e => {
+      const v = e.target.value.replace(/\D/g,'');
+      inp.value = v.slice(-1);
+      if (v && i < inputs.length-1) inputs[i+1].focus();
+      if ([...inputs].every(x => x.value)) verifyOTP();
+    };
+    inp.onkeydown = e => { if (e.key==='Backspace' && !inp.value && i>0) inputs[i-1].focus(); };
+    inp.onpaste = e => {
+      e.preventDefault();
+      const d = e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);
+      d.split('').forEach((c,j) => { if (inputs[j]) inputs[j].value = c; });
+      if (d.length === 6) setTimeout(verifyOTP, 50);
+    };
+  });
+}
+
+async function verifyOTP() {
+  const code = [...document.querySelectorAll('.otp-d')].map(x=>x.value).join('');
+  if (code.length !== 6) return;
+  const btn = $('verify-btn');
+  btn.disabled=true; btn.textContent='Verifying…'; $('a3-err').style.display='none';
+  try {
+    // Step 1: confirm phone
+    await confirmResult.confirm(code);
+    // Step 2: sign out phone user
+    await auth.signOut();
+    // Step 3: create email/password account
+    const cred = await auth.createUserWithEmailAndPassword(signupTmp.email, signupTmp.pass);
+    const uid = cred.user.uid;
+    const phoneKey = signupTmp.phone.replace(/\+/g,'_');
+    // Step 4: write user data (user IS now authenticated as email user)
+    const newUser = {
+      name: signupTmp.name,
+      email: signupTmp.email,
+      phone: signupTmp.phone,
+      phoneVerified: true,
+      appsUsed: 0,
+      purchasedCredits: 0,
+      agentEnabled: false,
+      agentStatus: 'idle',
+      agentMatchThreshold: 80,
+      linkedinEmail: '',
+      linkedinPassword: '',
+      profile: {
+        personal: {name:signupTmp.name, email:signupTmp.email, phone:signupTmp.phone, location:'', linkedin:'', github:'', website:'', summary:''},
+        experience: [], education: [],
+        skills: {technical:'', soft:'', languages:''},
+        certifications: '', projects: ''
+      },
+      criteria: {
+        jobTitles:'', locations:'', remote:'hybrid',
+        salaryMin:'', salaryMax:'', currency:'USD',
+        experienceLevel:'mid', industries:'',
+        targetCompanies:'', excludeCompanies:'',
+        maxPerDay:10
+      },
+      schedule: {frequency:'off', time:'09:00', days:[], maxPerRun:5, enabled:false},
+      apps: [],
+      createdAt: Date.now()
+    };
+    // Write user and phone reservation atomically
+    await db.ref('users/'+uid).set(newUser);
+    await db.ref('phones/'+phoneKey).set({uid, createdAt:Date.now()});
+    // auth.onAuthStateChanged will fire and navigate to onboarding
+  } catch(e) {
+    let msg = e.message.replace('Firebase: ','');
+    if (e.message.includes('invalid-verification-code')) msg = 'Wrong code — please try again.';
+    else if (e.message.includes('already-in-use')) msg = 'An account with this email already exists. Try signing in.';
+    else if (e.message.includes('PERMISSION_DENIED')) msg = 'Permission error. Please try again.';
+    showErr('a3-err', msg);
+    btn.disabled=false; btn.textContent='Verify & create account';
+  }
+}
+
+async function doLogin() {
+  const email = $('l-email').value.trim();
+  const pass  = $('l-pass').value;
+  $('login-err').style.display = 'none';
+  const btn = $('login-btn');
+  btn.disabled=true; btn.textContent='Signing in…';
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    let msg = e.message.replace('Firebase: ','');
+    if (e.message.includes('user-not-found') || e.message.includes('wrong-password') || e.message.includes('invalid-credential'))
+      msg = 'Invalid email or password.';
+    showErr('login-err', msg);
+    btn.disabled=false; btn.textContent='Sign in';
+  }
+}
+
+function doSignOut() { auth.signOut(); }
+
+// ═══════════════════════════════════════════════════════════════
+// ONBOARDING
+// ═══════════════════════════════════════════════════════════════
+let obStep = 0;
+const OB_STEPS = [
+  {t:'Upload your CV', h:'AI reads it and fills your profile automatically', fn:obCV},
+  {t:'What are you looking for?', h:'Your job preferences', fn:obCriteria},
+  {t:'Connect LinkedIn', h:'Required for the auto agent to apply on your behalf', fn:obLinkedIn},
+  {t:"You're all set!", h:'Ready to start', fn:obDone}
+];
+
+function startOB() { obStep=0; pg('pg-ob'); renderOB(); }
+function renderOB() {
+  const s = OB_STEPS[obStep];
+  $('ob-title').textContent = s.t;
+  $('ob-hint').textContent  = s.h;
+  const dots = $('ob-dots'); dots.innerHTML='';
+  OB_STEPS.forEach((_,i) => {
+    const d = mk('div', {cls:'sdot '+(i===obStep?'on':i<obStep?'done':'idle')});
+    dots.appendChild(d);
+  });
+  $('ob-body').innerHTML = '';
+  s.fn($('ob-body'));
+  $('ob-back').style.visibility = obStep===0 ? 'hidden' : 'visible';
+  $('ob-next').textContent = obStep===OB_STEPS.length-1 ? 'Go to dashboard →' : 'Continue →';
+}
+function obNext() { if (obStep < OB_STEPS.length-1) { obStep++; renderOB(); } else openApp(); }
+function obBack() { if (obStep > 0) { obStep--; renderOB(); } }
+
+// PDF parsing
+async function readCVFile(file) {
+  if (file.name.toLowerCase().endsWith('.pdf')) {
+    const ab  = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({data:ab}).promise;
+    const pages = [];
+    for (let i=1; i<=Math.min(pdf.numPages,10); i++) {
+      const p  = await pdf.getPage(i);
+      const tc = await p.getTextContent();
+      pages.push(tc.items.map(s=>s.str).join(' '));
+    }
+    return pages.join('\n');
+  }
+  return file.text();
+}
+
+async function parseCV(text) {
+  const raw = await callAI([{role:'user', content:'Parse this CV. Return ONLY valid JSON:\n\n'+text.slice(0,5500)+'\n\n{"name":"","email":"","phone":"","location":"","linkedin":"","summary":"","experience":[{"company":"","role":"","start":"","end":"","current":false,"description":"","achievements":""}],"education":[{"institution":"","degree":"","field":"","start":"","end":"","gpa":""}],"technical":"","soft":"","languages":"","projects":"","certifications":""}'}], 'You are a CV parser. Return ONLY valid JSON, no markdown, no extra text.');
+  const clean = raw.replace(/```json|```/g,'').trim();
+  const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
+  return JSON.parse(clean.slice(s, e+1));
+}
+
+function applyParsed(parsed) {
+  const prof = U.data.profile || {};
+  prof.personal = Object.assign(prof.personal||{}, {
+    name: parsed.name||'', email: parsed.email||'',
+    phone: parsed.phone||'', location: parsed.location||'',
+    linkedin: parsed.linkedin||'', summary: parsed.summary||''
+  });
+  if (parsed.experience?.length) prof.experience = parsed.experience.map((e,i)=>({...e,id:Date.now()+i}));
+  if (parsed.education?.length)  prof.education  = parsed.education.map((e,i)=>({...e,id:Date.now()+i+100}));
+  prof.skills = {technical:parsed.technical||'', soft:parsed.soft||'', languages:parsed.languages||''};
+  if (parsed.projects)      prof.projects      = parsed.projects;
+  if (parsed.certifications) prof.certifications = parsed.certifications;
+  return prof;
+}
+
+function obCV(c) {
+  const status = mk('div', {css:'margin-top:1rem'});
+  const skip = mk('button', {cls:'btn btn-ghost btn-full', css:'margin-top:12px', txt:'Skip — fill manually later'});
+  skip.onclick = () => { obStep++; renderOB(); };
+  const wrap = dropzone('.pdf,.txt,.docx', async file => {
+    status.innerHTML = '<div class="alert alert-i">⏳ Reading CV…</div>';
+    try {
+      const text   = await readCVFile(file);
+      status.innerHTML = '<div class="alert alert-i">⏳ AI parsing your CV…</div>';
+      const parsed = await parseCV(text);
+      const prof   = applyParsed(parsed);
+      await saveUser({profile:prof, name:parsed.name||U.data.name});
+      status.innerHTML = '<div class="alert alert-o">✓ CV imported — '+(parsed.experience||[]).length+' jobs · '+(parsed.education||[]).length+' education entries. Review in My Profile.</div>';
+      skip.textContent = 'Continue →'; skip.onclick = () => { obStep++; renderOB(); };
+    } catch(e) { status.innerHTML = '<div class="alert alert-e">'+e.message+'</div>'; }
+  });
+  c.appendChild(wrap); c.appendChild(status); c.appendChild(skip);
+}
+
+function obCriteria(c) {
+  const cr = U.data.criteria || {};
+  const save = async () => saveUser({criteria:cr});
+  c.appendChild(fld('Job titles you\'re targeting', cr.jobTitles, v=>{cr.jobTitles=v;save();}, {ph:'Accountant, Finance Manager, Data Analyst…', help:'Comma-separated — the agent searches these'}));
+  c.appendChild(fld('Preferred locations', cr.locations, v=>{cr.locations=v;save();}, {ph:'Warsaw, Remote, London…', help:'Comma-separated'}));
+  c.appendChild(fld('Work mode', cr.remote, v=>{cr.remote=v;save();}, {opts:[['remote','Remote only'],['hybrid','Hybrid'],['onsite','On-site only'],['any','No preference']], def:cr.remote||'hybrid'}));
+}
+
+function obLinkedIn(c) {
+  const notice = mk('div', {cls:'alert alert-i', css:'margin-bottom:14px'});
+  notice.innerHTML = '🔒 Your credentials are stored securely and only used by our agent to apply on your behalf. We never sell or share your data.';
+  c.appendChild(notice);
+  let liEmail = U.data.linkedinEmail || '';
+  let liPass  = '';
+  const ef = fld('LinkedIn Email', liEmail, v => liEmail=v, {ph:'your.linkedin@email.com', type:'email'});
+  const pf = fld('LinkedIn Password', '', v => liPass=v, {ph:'Your LinkedIn password', type:'password', help:'Used only by the agent to log in and apply'});
+  c.appendChild(ef); c.appendChild(pf);
+  const saveBtn = mk('button', {cls:'btn btn-p', css:'width:100%;justify-content:center;padding:11px', txt:'Save LinkedIn credentials'});
+  saveBtn.onclick = async () => {
+    const e = ef.querySelector('input').value.trim();
+    const p = pf.querySelector('input').value;
+    if (!e||!p) { alert('Please enter both email and password.'); return; }
+    saveBtn.disabled=true; saveBtn.textContent='Saving…';
+    await saveUser({linkedinEmail:e, linkedinPassword:btoa(unescape(encodeURIComponent(p)))});
+    saveBtn.textContent='✓ Saved!';
+    setTimeout(()=>{saveBtn.textContent='Save LinkedIn credentials';saveBtn.disabled=false;}, 2000);
+  };
+  c.appendChild(saveBtn);
+  const skip = mk('button', {cls:'btn btn-ghost', css:'width:100%;justify-content:center;margin-top:10px;font-size:12px;color:var(--t3)', txt:'Skip — add later in Agent tab'});
+  skip.onclick = () => { obStep++; renderOB(); };
+  c.appendChild(skip);
+}
+
+function obDone(c) {
+  const n = (U.data?.name||'').split(' ')[0] || 'there';
+  c.innerHTML = '<div style="text-align:center;padding:.5rem 0"><div style="font-size:52px;margin-bottom:16px">🎉</div><h3 style="font-size:22px;font-weight:800;color:var(--t);margin-bottom:8px;letter-spacing:-.02em">You\'re all set, '+n+'!</h3><p style="font-size:14px;color:var(--t2);line-height:1.8;margin-bottom:1.25rem">Go to <strong style="color:var(--t)">Auto Agent</strong>, set your match threshold and schedule, click Start — the agent applies to jobs for you automatically.</p><div class="alert alert-o" style="text-align:left;margin-bottom:0">✓ Phone verified · ✓ '+FREE_CREDITS+' free credits ready · ✓ No downloads needed</div></div>';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// APP SHELL
+// ═══════════════════════════════════════════════════════════════
+function openApp() {
+  pg('pg-app');
+  updateSidebar();
+  renderTab();
+  startAgentPoll();
+}
+
+function updateSidebar() {
+  if (!U.data) return;
+  $('sb-name').textContent  = U.data.name || U.data.email || '';
+  if (U.data.phone) $('sb-phone').textContent = '📱 ' + U.data.phone;
+  updateSidebarCredits();
+  updateUsageBar();
+}
+
+function updateSidebarCredits() {
+  const cr = getCredits();
+  const el = $('sb-credits');
+  if (!el) return;
+  el.innerHTML = '';
+  const cls = cr===0?'empty':cr<=3?'low':'';
+  const badge = mk('div', {cls:'cr-badge '+(cls||'')});
+  badge.innerHTML = '⚡ '+cr+' credit'+(cr===1?'':'s');
+  el.appendChild(badge);
+}
+
+function updateUsageBar() {
+  const el = $('sb-usage');
+  if (!el || !U.data) return;
+  el.innerHTML = '';
+  const used  = U.data.appsUsed || 0;
+  const total = FREE_CREDITS + (U.data.purchasedCredits||0);
+  const left  = Math.max(0, total-used);
+  const pct   = Math.min(100, Math.round(used/Math.max(total,1)*100));
+  const color = left===0?'var(--rd)':left<=3?'var(--am)':'var(--p2)';
+  el.innerHTML = '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t3);margin-bottom:5px"><span>Applications</span><span style="color:'+color+'">'+left+' left</span></div>';
+  const bar = mk('div', {cls:'ubar'});
+  bar.appendChild(mk('div', {cls:'ufill', css:'width:'+pct+'%;background:'+color}));
+  el.appendChild(bar);
+}
+
+function setTab(t) {
+  U.tab = t;
+  document.querySelectorAll('.nb').forEach(b => {
+    const on = b.dataset.t === t;
+    b.classList.toggle('on', on);
+    const ic = b.querySelector('.nb-icon');
+    if (ic) ic.style.color = on ? 'var(--p2)' : 'var(--t3)';
+  });
+  document.querySelectorAll('.mobile-nb').forEach(b => b.classList.toggle('on', b.dataset.t===t));
+  renderTab();
+}
+
+function renderTab() {
+  $('main-area').innerHTML = '';
+  const fns = {dash:pgDash, profile:pgProfile, prefs:pgPrefs, gen:pgGen, apps:pgApps, agent:pgAgent, contact:pgContact, acct:pgAcct};
+  (fns[U.tab] || pgDash)();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AGENT POLL — refresh agent status every 30s
+// ═══════════════════════════════════════════════════════════════
+function startAgentPoll() {
+  if (agentPollTimer) clearInterval(agentPollTimer);
+  agentPollTimer = setInterval(async () => {
+    if (!U.user) return;
+    try {
+      const snap = await db.ref('users/'+U.user.uid+'/agentStatus').get();
+      const status = snap.val() || 'idle';
+      if (status !== (U.data?.agentStatus)) {
+        U.data = U.data || {};
+        U.data.agentStatus = status;
+        updateSidebar();
+        if (U.tab === 'dash') renderTab();
+      }
+      // Auto-sync new agent applications
+      await syncAgentApps();
+    } catch(e) {}
+  }, 30000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════════
+function pgDash() {
+  const apps   = U.data.apps || [];
+  const byS    = s => apps.filter(a=>a.status===s).length;
+  const recent = [...apps].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,6);
+  const m = $('main-area');
+  const sec = mk('div', {cls:'sec'});
+  const fn = (U.data.name||'').split(' ')[0];
+  sec.appendChild(mk('div', {cls:'sec-h', txt:'Hello, '+fn+' 👋'}));
+  sec.appendChild(mk('div', {cls:'sec-s', txt:'Your job search at a glance'}));
+
+  if (U.cfg.announcement) {
+    const a = mk('div', {cls:'alert alert-i', css:'margin-bottom:1.5rem', txt:U.cfg.announcement});
+    sec.appendChild(a);
+  }
+
+  // Agent status banner
+  const agStatus = U.data.agentStatus || 'idle';
+  const agEnabled = U.data.agentEnabled;
+  const bannerCss = agEnabled&&agStatus==='running'
+    ? 'background:var(--gnbg);border-color:var(--gn);color:var(--gn)'
+    : agStatus==='error'
+    ? 'background:var(--rdbg);border-color:var(--rd);color:var(--rd)'
+    : 'background:var(--bg3);border-color:var(--bd);color:var(--t2)';
+
+  const agBanner = mk('div', {css:'display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1.5px solid;border-radius:var(--r);margin-bottom:1.5rem;flex-wrap:wrap;gap:10px;'+bannerCss});
+  const agText = mk('div');
+  const agDot = agEnabled&&agStatus==='running'?'● ':'○ ';
+  agText.innerHTML = '<div style="font-size:14px;font-weight:700">'+(agEnabled&&agStatus==='running'?agDot+'Agent is applying to jobs':agStatus==='error'?'⚠ Agent error':agEnabled?'Agent active — waiting for schedule':'○ Agent not started yet')+'</div><div style="font-size:12px;margin-top:2px;opacity:.8">'+(U.data.agentLastAction||'No recent activity')+'</div>';
+  const agBtn = mk('button', {cls:'btn btn-sm', txt:'Configure →'});
+  agBtn.onclick = () => setTab('agent');
+  agBanner.appendChild(agText); agBanner.appendChild(agBtn);
+  sec.appendChild(agBanner);
+
+  // Metrics
+  const met = mk('div', {css:'display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.75rem'});
+  const cr = getCredits();
+  [
+    ['Applied',apps.length,'var(--t)'],
+    ['Interviews',byS('interview'),'var(--gn)'],
+    ['Offers',byS('offer'),'var(--am)'],
+    ['Credits',cr,'var(--p3)']
+  ].forEach(([l,v,c]) => {
+    const ms = mk('div', {cls:'stat'});
+    ms.innerHTML = '<div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">'+l+'</div><div style="font-size:30px;font-weight:800;color:'+c+'">'+v+'</div>';
+    met.appendChild(ms);
+  });
+  sec.appendChild(met);
+
+  const grid = mk('div', {css:'display:grid;grid-template-columns:3fr 2fr;gap:1.25rem'});
+
+  // Recent apps
+  const rc = mk('div', {cls:'card'});
+  rc.appendChild(mk('div', {cls:'card-hd', txt:'RECENT APPLICATIONS'}));
+  if (!recent.length) {
+    rc.innerHTML += '<div style="color:var(--t3);font-size:14px;padding:2rem;text-align:center;line-height:2"><div style="font-size:36px;margin-bottom:8px">🤖</div>No applications yet<br/><span style="font-size:12px">Start the agent or apply manually</span></div>';
+  } else {
+    recent.forEach(a => {
+      const r = mk('div', {css:'display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1.5px solid var(--bd)'});
+      r.innerHTML = '<div><div style="font-weight:600;color:var(--t)">'+a.role+'</div><div style="font-size:12px;color:var(--t3);margin-top:2px">'+a.company+' · '+a.date+(a.source==='agent'?' · <span style="color:var(--p3);font-size:10px">🤖 auto</span>':'')+'</div></div>';
+      r.appendChild(sbadge(a.status));
+      rc.appendChild(r);
+    });
+  }
+  grid.appendChild(rc);
+
+  const qa = mk('div', {css:'display:flex;flex-direction:column;gap:1rem'});
+  const qc = mk('div', {cls:'card'});
+  qc.appendChild(mk('div', {cls:'card-hd', txt:'QUICK ACTIONS'}));
+  [
+    ['🤖','Set up auto agent','agent'],
+    ['✦','Apply to a job manually','gen'],
+    ['◉','Edit my profile','profile'],
+    ['◎','All applications','apps']
+  ].forEach(([icon,label,tab]) => {
+    const b = mk('button', {cls:'btn btn-full', css:'margin-bottom:8px;justify-content:flex-start'});
+    b.innerHTML = '<span style="color:var(--p2);font-size:16px">'+icon+'</span>'+label;
+    b.onclick = () => setTab(tab);
+    qc.appendChild(b);
+  });
+  qa.appendChild(qc);
+
+  if (cr <= 3) {
+    const uc = mk('div', {cls:'card', css:'border-color:var(--p)'});
+    uc.innerHTML = '<div style="font-size:13px;font-weight:700;color:var(--p3);margin-bottom:8px">⚡ '+cr+' credit'+(cr===1?'':'s')+' remaining</div><p style="font-size:12px;color:var(--t3);margin-bottom:12px">Buy more credits — they never expire.</p>';
+    const ub = mk('button', {cls:'btn btn-p btn-full', txt:'Buy credits →'});
+    ub.onclick = () => pg('pg-price');
+    uc.appendChild(ub);
+    qa.appendChild(uc);
+  }
+
+  grid.appendChild(qa);
+  sec.appendChild(grid);
+  m.appendChild(sec);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PROFILE
+// ═══════════════════════════════════════════════════════════════
+function pgProfile() {
+  const p    = U.data.profile || {};
+  const pers = p.personal || {};
+  const m = $('main-area');
+  const sec = mk('div', {cls:'sec'});
+  sec.appendChild(mk('div', {cls:'sec-h', txt:'My Profile'}));
+  sec.appendChild(mk('div', {cls:'sec-s', txt:'The more detail you add, the better your AI applications'}));
+
+  const tabs = ['cv','personal','experience','education','skills'];
+  const tb = mk('div', {css:'display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap'});
+  tabs.forEach(t => {
+    const b = mk('button', {cls:'tb'+(U.ptab===t?' on':''), txt:t==='cv'?'📄 Import CV':t.charAt(0).toUpperCase()+t.slice(1)});
+    b.onclick = () => { U.ptab=t; renderTab(); };
+    tb.appendChild(b);
+  });
+  sec.appendChild(tb);
+
+  if (U.ptab === 'cv') {
+    const card = mk('div', {cls:'card'});
+    const notice = mk('div', {cls:'alert alert-i', css:'margin-bottom:1rem'});
+    notice.textContent = 'Upload your PDF, DOCX, or .txt CV — AI fills your entire profile automatically.';
+    card.appendChild(notice);
+    const st = mk('div', {css:'margin-top:1rem'});
+    const wrap = dropzone('.pdf,.txt,.docx', async file => {
+      st.innerHTML = '<div class="alert alert-i">⏳ Reading file…</div>';
+      try {
+        const text   = await readCVFile(file);
+        st.innerHTML = '<div class="alert alert-i">⏳ AI parsing…</div>';
+        const parsed = await parseCV(text);
+        const prof   = applyParsed(parsed);
+        await saveUser({profile:prof});
+        st.innerHTML = '<div class="alert alert-o">✓ Imported '+(parsed.experience||[]).length+' jobs · '+(parsed.education||[]).length+' education entries. Review other tabs.</div>';
+      } catch(e) { st.innerHTML = '<div class="alert alert-e">'+e.message+'</div>'; }
+    });
+    card.appendChild(wrap); card.appendChild(st);
+    sec.appendChild(card);
+  }
+
+  if (U.ptab === 'personal') {
+    const card = mk('div', {cls:'card'});
+    const grid = mk('div', {cls:'f2'});
+    [
+      ['Full Name','name','Jane Doe'],['Email','email','jane@example.com'],
+      ['Phone','phone','+48 600 000 000'],['Location','location','Warsaw, Poland'],
+      ['LinkedIn URL','linkedin','linkedin.com/in/jane'],['GitHub','github','github.com/jane'],
+      ['Website','website','jane.dev']
+    ].forEach(([l,k,ph]) => {
+      grid.appendChild(fld(l, pers[k], async v => { pers[k]=v; p.personal=pers; await saveUser({profile:p}); }, {ph}));
+    });
+    card.appendChild(grid);
+    card.appendChild(fld('Professional Summary', pers.summary, async v => { pers.summary=v; p.personal=pers; await saveUser({profile:p}); }, {rows:5, ph:'Experienced professional with 7+ years in finance. Specialised in…', help:'AI uses this in every cover letter — make it compelling'}));
+    sec.appendChild(card);
+  }
+
+  if (U.ptab === 'experience') {
+    (p.experience||[]).forEach(e => {
+      const card = mk('div', {cls:'card', css:'position:relative;margin-bottom:1rem'});
+      const del = mk('button', {css:'position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;color:var(--rd);font-size:18px', txt:'×'});
+      del.onclick = async () => { p.experience=p.experience.filter(x=>x.id!==e.id); await saveUser({profile:p}); renderTab(); };
+      card.appendChild(del);
+      card.innerHTML += '<div style="font-weight:700;color:var(--t);font-size:15px">'+e.role+' at '+e.company+'</div><div style="font-size:12px;color:var(--p3);margin:4px 0 8px">'+e.start+' – '+(e.current?'Present':e.end)+'</div>'+(e.description?'<div style="font-size:13px;color:var(--t2)">'+e.description+'</div>':'')+(e.achievements?'<div style="font-size:12px;color:var(--ac);margin-top:6px">✓ '+e.achievements+'</div>':'');
+      sec.appendChild(card);
+    });
+    const form = mk('div', {cls:'card', css:'border:1.5px dashed var(--bd2)'});
+    form.appendChild(mk('div', {css:'font-size:13px;font-weight:700;color:var(--p3);margin-bottom:1rem', txt:'+ Add Work Experience'}));
+    const tmp = {company:'',role:'',start:'',end:'',current:false,description:'',achievements:''};
+    const fg = mk('div', {cls:'f2'});
+    [['Company','company','Deloitte'],['Job Title','role','Senior Accountant'],['Start','start','2021-01'],['End','end','2024-01']].forEach(([l,k,ph]) => {
+      fg.appendChild(fld(l, tmp[k], v=>tmp[k]=v, {ph}));
+    });
+    form.appendChild(fg);
+    const cl = mk('label', {css:'display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);margin-bottom:14px;cursor:pointer'});
+    const cb = mk('input', {type:'checkbox', css:'width:auto;accent-color:var(--p2)'});
+    cb.onchange = e => tmp.current = e.target.checked;
+    cl.appendChild(cb); cl.appendChild(document.createTextNode('I currently work here'));
+    form.appendChild(cl);
+    form.appendChild(fld('What did you do?', tmp.description, v=>tmp.description=v, {rows:3, ph:'Led financial reporting, managed accounts, supervised team of 5…'}));
+    form.appendChild(fld('Key achievements', tmp.achievements, v=>tmp.achievements=v, {rows:2, ph:'Reduced close time 3 days, managed €2M budget, grew clients 30%…', help:'Numbers make cover letters much stronger'}));
+    const ab = mk('button', {cls:'btn btn-p', txt:'+ Add'});
+    ab.onclick = async () => {
+      if (!tmp.company||!tmp.role) return;
+      if (!p.experience) p.experience=[];
+      p.experience.push({...tmp, id:Date.now()});
+      await saveUser({profile:p}); renderTab();
+    };
+    form.appendChild(ab);
+    sec.appendChild(form);
+  }
+
+  if (U.ptab === 'education') {
+    (p.education||[]).forEach(e => {
+      const card = mk('div', {cls:'card', css:'position:relative;margin-bottom:1rem'});
+      const del = mk('button', {css:'position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;color:var(--rd);font-size:18px', txt:'×'});
+      del.onclick = async () => { p.education=p.education.filter(x=>x.id!==e.id); await saveUser({profile:p}); renderTab(); };
+      card.appendChild(del);
+      card.innerHTML += '<div style="font-weight:700;color:var(--t)">'+e.degree+' in '+e.field+'</div><div style="font-size:12px;color:var(--p3);margin-top:4px">'+e.institution+' · '+e.start+'–'+e.end+(e.gpa?' · GPA '+e.gpa:'')+'</div>';
+      sec.appendChild(card);
+    });
+    const form = mk('div', {cls:'card', css:'border:1.5px dashed var(--bd2)'});
+    form.appendChild(mk('div', {css:'font-size:13px;font-weight:700;color:var(--p3);margin-bottom:1rem', txt:'+ Add Education'}));
+    const tmp = {institution:'',degree:'',field:'',start:'',end:'',gpa:''};
+    const fg = mk('div', {cls:'f2'});
+    [['University','institution','University of Warsaw'],['Degree','degree','Bachelor of Commerce'],['Subject','field','Accounting'],['GPA','gpa','3.7/4.0'],['Start','start','2018'],['End','end','2022']].forEach(([l,k,ph]) => {
+      fg.appendChild(fld(l, tmp[k], v=>tmp[k]=v, {ph}));
+    });
+    form.appendChild(fg);
+    const ab = mk('button', {cls:'btn btn-p', txt:'+ Add'});
+    ab.onclick = async () => {
+      if (!tmp.institution) return;
+      if (!p.education) p.education=[];
+      p.education.push({...tmp, id:Date.now()});
+      await saveUser({profile:p}); renderTab();
+    };
+    form.appendChild(ab);
+    sec.appendChild(form);
+  }
+
+  if (U.ptab === 'skills') {
+    const card = mk('div', {cls:'card'});
+    const sk = p.skills || {};
+    [
+      ['Your skills','technical','Excel, SAP, Financial Analysis, Tax, IFRS, SQL…','Comma-separated — AI matches these to job descriptions','4'],
+      ['Soft skills','soft','Leadership, attention to detail, client communication…','','2'],
+      ['Languages','languages','English (fluent), Polish (native)…','','1']
+    ].forEach(([l,k,ph,help,rows]) => {
+      card.appendChild(fld(l, sk[k], async v => { sk[k]=v; p.skills=sk; await saveUser({profile:p}); }, {ph,help,rows}));
+    });
+    sec.appendChild(card);
+  }
+  m.appendChild(sec);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PREFERENCES
+// ═══════════════════════════════════════════════════════════════
+function pgPrefs() {
+  const c = U.data.criteria || {};
+  const save = async () => saveUser({criteria:c});
+  const m = $('main-area');
+  const sec = mk('div', {cls:'sec'});
+  sec.appendChild(mk('div', {cls:'sec-h', txt:'Job Preferences'}));
+  sec.appendChild(mk('div', {cls:'sec-s', txt:'The agent uses these to find and apply to the right jobs for you'}));
+  const grid = mk('div', {css:'display:grid;grid-template-columns:1fr 1fr;gap:1.25rem'});
+
+  function mkCard(title, fields) {
+    const card = mk('div', {cls:'card'});
+    card.appendChild(mk('div', {cls:'card-hd', txt:title}));
+    fields.forEach(f => {
+      card.appendChild(fld(f.l, c[f.k], v=>{c[f.k]=v;save();}, {ph:f.ph, help:f.help, opts:f.opts, def:f.def, rows:f.rows}));
+    });
+    return card;
+  }
+
+  grid.appendChild(mkCard('TARGET ROLES', [
+    {l:'Job titles', k:'jobTitles', ph:'Accountant, Finance Manager, CFO…', help:'Comma-separated — agent searches these on LinkedIn'},
+    {l:'Experience level', k:'experienceLevel', def:'mid', opts:[['entry','Entry (0–2 yrs)'],['mid','Mid (2–5 yrs)'],['senior','Senior (5–10 yrs)'],['lead','Lead / Principal'],['manager','Manager / Director']]},
+    {l:'Industries', k:'industries', ph:'Finance, Banking, Tech…', help:'Leave empty for all industries'},
+  ]));
+  grid.appendChild(mkCard('LOCATION & MODE', [
+    {l:'Preferred locations', k:'locations', ph:'Warsaw, London, Remote…', help:'Comma-separated'},
+    {l:'Work mode', k:'remote', def:'hybrid', opts:[['remote','Remote only'],['hybrid','Hybrid'],['onsite','On-site only'],['any','No preference']]},
+  ]));
+
+  const salCard = mk('div', {cls:'card'});
+  salCard.appendChild(mk('div', {cls:'card-hd', txt:'SALARY & DAILY LIMIT'}));
+  const sg = mk('div', {cls:'f3'});
+  sg.appendChild(fld('Min salary', c.salaryMin, v=>{c.salaryMin=v;save();}, {ph:'60000'}));
+  sg.appendChild(fld('Max salary', c.salaryMax, v=>{c.salaryMax=v;save();}, {ph:'100000'}));
+  sg.appendChild(fld('Currency', c.currency, v=>{c.currency=v;save();}, {opts:[['USD','USD $'],['EUR','EUR €'],['GBP','GBP £'],['PLN','PLN zł'],['CAD','CAD $']], def:'USD'}));
+  salCard.appendChild(sg);
+  salCard.appendChild(fld('Max applications per day', c.maxPerDay||10, v=>{c.maxPerDay=parseInt(v)||10;save();}, {opts:[['3','3/day'],['5','5/day'],['10','10/day'],['20','20/day'],['50','50/day']], def:String(c.maxPerDay||10)}));
+  grid.appendChild(salCard);
+
+  grid.appendChild(mkCard('COMPANY PREFERENCES', [
+    {l:'Dream companies', k:'targetCompanies', rows:2, ph:'Deloitte, KPMG, PwC…', help:'Agent prioritises these'},
+    {l:'Companies to avoid', k:'excludeCompanies', rows:2, ph:'OldEmployer…', help:'Agent never applies to these'},
+  ]));
+
+  sec.appendChild(grid);
+  m.appendChild(sec);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GENERATOR
+// ═══════════════════════════════════════════════════════════════
+function buildCtx() {
+  const p = U.data.profile||{}, c = U.data.criteria||{}, pers = p.personal||{};
+  const exp = (p.experience||[]).map(e => e.role+' at '+e.company+' ('+e.start+'–'+(e.current?'Present':e.end)+'): '+e.description+(e.achievements?' | '+e.achievements:'')).join('\n');
+  const edu = (p.education||[]).map(e => e.degree+' in '+e.field+' from '+e.institution).join(', ');
+  return 'Name: '+pers.name+'\nEmail: '+pers.email+'\nLocation: '+pers.location+'\nLinkedIn: '+pers.linkedin+'\nSummary: '+pers.summary+'\nExperience:\n'+(exp||'Not provided')+'\nEducation: '+(edu||'Not provided')+'\nSkills: '+(p.skills?.technical||'')+'\nSoft: '+(p.skills?.soft||'')+'\nLanguages: '+(p.skills?.languages||'')+'\nTarget: '+c.jobTitles+' | '+c.locations+' | '+(c.salaryMin||'')+'–'+(c.salaryMax||'')+' '+(c.currency||'USD');
+}
+
+function pgGen() {
+  let jt='', co='', jd='', cq='';
+  const m = $('main-area');
+  const sec = mk('div', {cls:'sec'});
+  sec.appendChild(mk('div', {cls:'sec-h', txt:'Apply to a Job'}));
+  sec.appendChild(mk('div', {cls:'sec-s', txt:'Paste a job posting — AI generates your complete tailored application'}));
+  const errBox = mk('div', {cls:'alert alert-e', css:'display:none'});
+  sec.appendChild(errBox);
+  const grid = mk('div', {css:'display:grid;grid-template-columns:5fr 6fr;gap:1.5rem'});
+  const left = mk('div', {css:'display:flex;flex-direction:column;gap:1.5rem'});
+  const jc = mk('div', {cls:'card'});
+  jc.appendChild(mk('div', {cls:'card-hd', txt:'JOB DETAILS'}));
+  const jg = mk('div', {cls:'f2'});
+  jg.appendChild(fld('Job Title', jt, v=>jt=v, {ph:'Senior Accountant'}));
+  jg.appendChild(fld('Company', co, v=>co=v, {ph:'Deloitte'}));
+  jc.appendChild(jg);
+  jc.appendChild(fld('Paste the job description', jd, v=>jd=v, {rows:8, ph:'Copy and paste the full job posting here — requirements, company description, everything…', help:'More text = more tailored output'}));
+  jc.appendChild(fld('Custom application question (optional)', cq, v=>cq=v, {ph:'Why do you want to work in finance?'}));
+
+  const cr = getCredits();
+  if (cr <= 1) jc.appendChild(mk('div', {cls:'alert alert-w', css:'margin-bottom:8px', txt:cr===0?'No credits — buy more to continue.':'Last free application!'}));
+
+  const genBtn = mk('button', {cls:'btn btn-p btn-full', css:'padding:14px;font-size:15px', txt:'✦ Generate My Application'});
+  genBtn.onclick = async () => {
+    if (!checkCredits()) return;
+    if (!jt||!co) { errBox.textContent='Please enter the job title and company.'; errBox.style.display='flex'; return; }
+    errBox.style.display='none'; genBtn.textContent='⏳ Generating…'; genBtn.disabled=true;
+    outArea.innerHTML = '<div style="text-align:center;padding:4rem;color:var(--t3)"><div class="spin" style="font-size:36px;display:block;margin-bottom:16px">✦</div><div style="font-size:15px;font-weight:600;color:var(--t2)">AI is writing your application…</div><div style="font-size:12px;margin-top:8px">Usually 10–20 seconds</div></div>';
+    const sys = 'You are an expert job application writer. You know this candidate in detail:\n\n'+buildCtx()+'\n\nWrite tailored, professional, specific materials. Reference real experience and match job keywords.\nCONCISE: cover letter max 4 paragraphs, other answers max 3 sentences.\nRESPOND ONLY WITH RAW JSON (no markdown, use \\n for newlines in strings):\n{"coverLetter":"...","whyCompany":"...","strengthsAnswer":"...","challengeAnswer":"...","salaryAnswer":"...","customAnswer":"...","matchScore":75,"keywords":["k1","k2"],"redFlags":"None identified"}';
+    try {
+      const raw = await callAI([{role:'user', content:'Role: '+jt+' at '+co+'\nDescription: '+(jd||'Not provided')+'\nCustom Q: '+(cq||'None')+'\nSalary: '+(U.data.criteria?.salaryMin||'')+'–'+(U.data.criteria?.salaryMax||'')+' '+(U.data.criteria?.currency||'USD')}], sys);
+      let out = null;
+      try { const c1=raw.replace(/```json|```/g,'').trim(); const s=c1.indexOf('{'),e=c1.lastIndexOf('}'); if(s!==-1&&e!==-1) out=JSON.parse(c1.slice(s,e+1)); } catch{}
+      if (!out||!out.coverLetter) {
+        const exS=k=>{const mm=raw.match(new RegExp('"'+k+'"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"','s'));return mm?mm[1].replace(/\\n/g,'\n').replace(/\\"/g,'"'):'';};
+        const exN=k=>{const mm=raw.match(new RegExp('"'+k+'"\\s*:\\s*(\\d+)'));return mm?+mm[1]:50;};
+        const exA=k=>{const mm=raw.match(new RegExp('"'+k+'"\\s*:\\s*\\[([^\\]]+)\\]'));return mm?(mm[1].match(/"([^"]+)"/g)||[]).map(x=>x.slice(1,-1)):[];};
+        out={coverLetter:exS('coverLetter'),whyCompany:exS('whyCompany'),strengthsAnswer:exS('strengthsAnswer'),challengeAnswer:exS('challengeAnswer'),salaryAnswer:exS('salaryAnswer'),customAnswer:exS('customAnswer'),matchScore:exN('matchScore'),keywords:exA('keywords'),redFlags:exS('redFlags')||'None identified'};
+      }
+      if (!out||!out.coverLetter) throw new Error('Could not parse AI response. Please try again.');
+      U.genOut = out; await useCredit(); renderOutput(outArea,out,jt,co,cq);
+    } catch(e) { errBox.textContent='Error: '+e.message; errBox.style.display='flex'; outArea.innerHTML=''; }
+    genBtn.textContent='✦ Generate My Application'; genBtn.disabled=false;
+  };
+  jc.appendChild(genBtn); left.appendChild(jc);
+
+  // Interview chat
+  const cc = mk('div', {cls:'card'});
+  cc.appendChild(mk('div', {cls:'card-hd', txt:'◉ INTERVIEW PREP CHAT'}));
+  cc.appendChild(mk('div', {css:'font-size:12px;color:var(--t3);margin-bottom:10px', txt:'Practice interview questions — I\'ll answer as you.'}));
+  const ca = mk('div', {cls:'chat-box slim-scroll'});
+  if (!U.chat.length) ca.innerHTML = '<div style="font-size:12px;color:var(--t3);line-height:1.9">Try:\n"Tell me about yourself"\n"Why do you want this job?"\n"What\'s your greatest achievement?"</div>';
+  else U.chat.forEach(msg => { const b=mk('div',{cls:'cb cb-'+(msg.role==='user'?'u':'a'),txt:msg.content}); ca.appendChild(b); });
+  cc.appendChild(ca);
+  const cr2 = mk('div', {css:'display:flex;gap:8px'});
+  const ci = mk('input', {type:'text', placeholder:'Ask an interview question…', css:'flex:1'});
+  const sb = mk('button', {cls:'btn btn-p', txt:'Send'});
+  sb.onclick = async () => {
+    const msg = ci.value.trim(); if (!msg) return; ci.value='';
+    if (ca.querySelector('[style]')) ca.innerHTML='';
+    U.chat.push({role:'user',content:msg});
+    const ub=mk('div',{cls:'cb cb-u',txt:msg}); ca.appendChild(ub); ca.scrollTop=ca.scrollHeight;
+    sb.textContent='…'; sb.disabled=true;
+    try {
+      const r = await callAI(U.chat,'Answer as this candidate in first person. Natural, specific, reference real experience.\n\n'+buildCtx());
+      U.chat.push({role:'assistant',content:r});
+      ca.appendChild(mk('div',{cls:'cb cb-a',txt:r}));
+    } catch(e) { ca.appendChild(mk('div',{cls:'cb cb-a',css:'color:var(--rd)',txt:'Error: '+e.message})); }
+    ca.scrollTop=ca.scrollHeight; sb.textContent='Send'; sb.disabled=false;
+  };
+  ci.onkeydown = e => { if(e.key==='Enter'&&!e.shiftKey) sb.click(); };
+  cr2.appendChild(ci); cr2.appendChild(sb); cc.appendChild(cr2);
+  left.appendChild(cc); grid.appendChild(left);
+
+  const outArea = mk('div', {css:'display:flex;flex-direction:column;gap:1rem'});
+  if (U.genOut) renderOutput(outArea,U.genOut,'','','');
+  else outArea.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;text-align:center;gap:14px;color:var(--t3)"><div style="font-size:64px;opacity:.06">✦</div><div style="font-size:16px;font-weight:700;color:var(--t2)">Your application appears here</div><div style="font-size:13px;max-width:280px;line-height:1.7">Fill in the job details and click Generate. AI writes a tailored cover letter, answers, and match score.</div></div>';
+  grid.appendChild(outArea); sec.appendChild(grid); m.appendChild(sec);
+}
+
+function renderOutput(container, out, jt, co, cq) {
+  container.innerHTML = '';
+  // Match score card
+  const sc = mk('div', {cls:'card', css:'border-color:var(--p2)'});
+  const scH = mk('div', {css:'display:flex;justify-content:space-between;align-items:center;margin-bottom:14px'});
+  scH.appendChild(mk('div', {cls:'card-hd', css:'margin-bottom:0', txt:'MATCH SCORE'}));
+  const sv = mk('button', {cls:'btn btn-sm', txt:'Save to tracker'});
+  sv.onclick = async () => {
+    if (!U.data.apps) U.data.apps=[];
+    U.data.apps.push({id:Date.now(),role:jt,company:co,status:'applied',date:new Date().toISOString().split('T')[0],coverLetter:out.coverLetter,matchScore:out.matchScore,notes:'',source:'manual'});
+    await saveUser({apps:U.data.apps}); sv.textContent='✓ Saved'; sv.disabled=true;
+  };
+  scH.appendChild(sv); sc.appendChild(scH);
+  const scoreColor = out.matchScore>=80?'var(--gn)':out.matchScore>=60?'var(--am)':'var(--rd)';
+  const sr = mk('div', {css:'display:flex;align-items:center;gap:16px;margin-bottom:10px'});
+  const sn = mk('div', {css:'font-size:52px;font-weight:800;color:'+scoreColor+';line-height:1;letter-spacing:-.03em', txt:out.matchScore+'%'});
+  const si = mk('div');
+  si.innerHTML = '<div style="font-size:14px;color:var(--t2);margin-bottom:8px;font-weight:600">'+(out.matchScore>=80?'Excellent match ✓':out.matchScore>=60?'Good match — apply with confidence':'Lower match — strong cover letter advised')+'</div>';
+  const kw = mk('div');
+  (out.keywords||[]).forEach(k => { const s=mk('span',{cls:'kw-tag',txt:k}); kw.appendChild(s); });
+  si.appendChild(kw); sr.appendChild(sn); sr.appendChild(si); sc.appendChild(sr);
+  if (out.redFlags&&out.redFlags!=='None identified') sc.appendChild(mk('div',{cls:'alert alert-w',css:'margin-bottom:0',txt:'💡 '+out.redFlags}));
+  container.appendChild(sc);
+
+  [
+    ['Your Cover Letter',out.coverLetter,true],
+    ['Why this company?',out.whyCompany,false],
+    ['Your key strengths',out.strengthsAnswer,false],
+    ['Challenge / STAR answer',out.challengeAnswer,false],
+    ['Salary expectations',out.salaryAnswer,false],
+    [(cq&&cq.length>3?'"'+cq+'"':'Why should we hire you?'),out.customAnswer,false]
+  ].forEach(([title,content,open]) => {
+    if (!content) return;
+    let isOpen = open;
+    const os = mk('div', {cls:'out-card'});
+    const hdr = mk('div', {cls:'out-hdr'});
+    const hl = mk('div', {css:'font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.07em;text-transform:uppercase', txt:title});
+    const hr = mk('div', {css:'display:flex;gap:8px;align-items:center'});
+    hr.appendChild(cpbtn(content));
+    const ar = mk('span', {css:'color:var(--t3);font-size:12px', txt:isOpen?'▲':'▼'});
+    hr.appendChild(ar); hdr.appendChild(hl); hdr.appendChild(hr);
+    const body = mk('div', {cls:'out-body', txt:content});
+    body.style.display = isOpen ? 'block' : 'none';
+    hdr.onclick = () => { isOpen=!isOpen; body.style.display=isOpen?'block':'none'; ar.textContent=isOpen?'▲':'▼'; };
+    os.appendChild(hdr); os.appendChild(body); container.appendChild(os);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// APPLICATIONS
+// ═══════════════════════════════════════════════════════════════
+async function syncAgentApps() {
+  try {
+    const snap = await db.ref('agent_apps/'+U.user.uid).get();
+    if (!snap.exists()) return 0;
+    const agentApps = Object.values(snap.val()||{});
+    const existingIds = new Set((U.data.apps||[]).map(a=>a.id));
+    const newApps = agentApps.filter(a => !existingIds.has(a.id));
+    if (newApps.length > 0) {
+      U.data.apps = [...(U.data.apps||[]), ...newApps];
+      await saveUser({apps:U.data.apps});
+    }
+    return newApps.length;
+  } catch(e) { return 0; }
+}
+
+function pgApps() {
+  const apps = U.data.apps || [];
+  const m = $('main-area');
+  const sec = mk('div', {cls:'sec'});
+  const agentCount = apps.filter(a=>a.source==='agent').length;
+  sec.appendChild(mk('div', {cls:'sec-h', txt:'My Applications'}));
+  sec.appendChild(mk('div', {cls:'sec-s', txt:apps.length+' total · '+agentCount+' auto-applied · '+(apps.length-agentCount)+' manual'}));
+
+  const fr = mk('div', {css:'display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center'});
+  const si = mk('input', {type:'text', placeholder:'Search company or role…', css:'flex:1;min-width:160px'});
+  si.value = U.fsq;
+  si.oninput = e => { U.fsq=e.target.value; renderList(); };
+  fr.appendChild(si);
+  ['all','applied','interview','offer','rejected'].forEach(s => {
+    const b = mk('button', {cls:'tb'+(U.fst===s?' on':''), css:'border-radius:99px', txt:s});
+    b.onclick = () => { U.fst=s; renderList(); };
+    fr.appendChild(b);
+  });
+  const pullBtn = mk('button', {cls:'btn btn-p btn-sm', txt:'↓ Sync agent'});
+  pullBtn.onclick = async () => {
+    pullBtn.disabled=true; pullBtn.textContent='Syncing…';
+    const n = await syncAgentApps();
+    pullBtn.textContent = n>0?'✓ '+n+' new':'Up to date';
+    updateUsageBar(); updateSidebarCredits();
+    setTimeout(() => { pullBtn.textContent='↓ Sync agent'; pullBtn.disabled=false; }, 3000);
+  };
+  fr.appendChild(pullBtn);
+  sec.appendChild(fr);
+
+  const wrap = mk('div', {css:'display:grid;grid-template-columns:1fr;gap:1rem'});
+  const list = mk('div');
+  const detail = mk('div', {cls:'card', css:'display:none'});
+
+  function renderList() {
+    list.innerHTML = '';
+    const filtered = apps
+      .filter(a => U.fst==='all' || a.status===U.fst)
+      .filter(a => !U.fsq || a.company.toLowerCase().includes(U.fsq.toLowerCase()) || a.role.toLowerCase().includes(U.fsq.toLowerCase()))
+      .sort((a,b) => new Date(b.date)-new Date(a.date));
+    if (!filtered.length) { list.innerHTML='<div style="text-align:center;color:var(--t3);padding:3rem;font-size:14px">No applications found.</div>'; return; }
+    filtered.forEach(a => {
+      const row = mk('div', {cls:'app-row'+(U.selApp?.id===a.id?' sel':'')});
+      row.onclick = () => {
+        U.selApp = U.selApp?.id===a.id ? null : a;
+        if (U.selApp) { showDetail(U.selApp); } else { detail.style.display='none'; wrap.style.gridTemplateColumns='1fr'; }
+        renderList();
+      };
+      const info = mk('div');
+      info.innerHTML = '<div style="font-weight:700;color:var(--t)">'+a.role+'</div><div style="font-size:12px;color:var(--t3);margin-top:2px">'+a.company+' · '+a.date+(a.source==='agent'?' · <span style="color:var(--p3)">🤖 auto</span>':'')+'</div>'+(a.notes?'<div style="font-size:11px;color:var(--p3);margin-top:3px;font-style:italic">📝 '+a.notes.slice(0,50)+'</div>':'');
+      const right = mk('div', {css:'display:flex;align-items:center;gap:8px'});
+      if (a.matchScore) right.appendChild(mk('span', {css:'font-size:11px;color:var(--t3)', txt:a.matchScore+'%'}));
+      right.appendChild(sbadge(a.status));
+      row.appendChild(info); row.appendChild(right); list.appendChild(row);
+    });
+  }
+
+  function showDetail(a) {
+    detail.innerHTML=''; wrap.style.gridTemplateColumns='1fr 1fr'; detail.style.display='block';
+    const dh = mk('div', {css:'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px'});
+    dh.innerHTML = '<div><div style="font-weight:800;font-size:16px;color:var(--t)">'+a.role+'</div><div style="font-size:13px;color:var(--t3)">'+a.company+' · Applied '+a.date+(a.source==='agent'?' · 🤖 auto-applied':'')+'</div></div>';
+    const xb = mk('button', {css:'background:none;border:none;cursor:pointer;color:var(--t3);font-size:22px', txt:'×'});
+    xb.onclick = () => { U.selApp=null; detail.style.display='none'; wrap.style.gridTemplateColumns='1fr'; renderList(); };
+    dh.appendChild(xb); detail.appendChild(dh);
+    detail.appendChild(mk('div', {css:'font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px', txt:'UPDATE STATUS'}));
+    const sb2 = mk('div', {css:'display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px'});
+    ['applied','interview','offer','rejected'].forEach(s => {
+      const b = mk('button', {cls:'tb'+(a.status===s?' on':''), css:'border-radius:99px', txt:s});
+      b.onclick = async () => {
+        const idx=(U.data.apps||[]).findIndex(x=>x.id===a.id);
+        if(idx>=0){U.data.apps[idx].status=s;a.status=s;await saveUser({apps:U.data.apps});renderList();showDetail(a);}
+      };
+      sb2.appendChild(b);
+    });
+    detail.appendChild(sb2);
+    detail.appendChild(mk('div', {css:'font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px', txt:'NOTES'}));
+    const nt = mk('textarea', {rows:'3', placeholder:'Interview date, recruiter name, follow-up notes…'});
+    nt.value = a.notes || ''; detail.appendChild(nt);
+    const nsb = mk('button', {cls:'btn btn-sm', css:'margin-top:6px', txt:'Save notes'});
+    nsb.onclick = async () => {
+      const idx=(U.data.apps||[]).findIndex(x=>x.id===a.id);
+      if(idx>=0){U.data.apps[idx].notes=nt.value;a.notes=nt.value;await saveUser({apps:U.data.apps});renderList();}
+    };
+    detail.appendChild(nsb);
+    if (a.coverLetter) {
+      const clH = mk('div', {css:'display:flex;justify-content:space-between;margin-bottom:8px;margin-top:16px'});
+      clH.appendChild(mk('div', {css:'font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em', txt:'COVER LETTER'}));
+      clH.appendChild(cpbtn(a.coverLetter)); detail.appendChild(clH);
+      const clB = mk('div', {css:'font-size:12px;color:var(--t2);line-height:1.8;max-height:220px;overflow-y:auto;background:var(--bg3);padding:12px;border-radius:var(--rs);border:1.5px solid var(--bd);white-space:pre-wrap', txt:a.coverLetter});
+      detail.appendChild(clB);
+    }
+    if (a.applyUrl) {
+      const ul = mk('div', {css:'margin-top:12px;font-size:12px;color:var(--t3)'});
+      ul.innerHTML = 'Job posting: <a href="'+a.applyUrl+'" target="_blank">View on LinkedIn</a>';
+      detail.appendChild(ul);
+    }
+    const db2 = mk('div', {css:'margin-top:16px;padding-top:16px;border-top:1.5px solid var(--bd)'});
+    const delbtn = mk('button', {cls:'btn btn-sm btn-rd', txt:'Delete application'});
+    delbtn.onclick = async () => {
+      if (!confirm('Delete this application?')) return;
+      U.data.apps=(U.data.apps||[]).filter(x=>x.id!==a.id);
+      await saveUser({apps:U.data.apps}); U.selApp=null;
+      detail.style.display='none'; wrap.style.gridTemplateColumns='1fr'; renderList();
+    };
+    db2.appendChild(delbtn); detail.appendChild(db2);
+  }
+
+  renderList(); wrap.appendChild(list); wrap.appendChild(detail);
+  sec.appendChild(wrap); m.appendChild(sec);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AGENT TAB
+// ═══════════════════════════════════════════════════════════════
+function pgAgent() {
+  const m = $('main-area');
+  const sec = mk('div', {cls:'sec'});
+  sec.appendChild(mk('div', {cls:'sec-h', txt:'Auto Agent'}));
+  sec.appendChild(mk('div', {cls:'sec-s', txt:'Configure your autonomous job application agent — runs on our servers, no setup needed'}));
+
+  // ── LinkedIn credentials ──────────────────────────────────────
+  const liCard = mk('div', {cls:'card', css:'margin-bottom:1.25rem'});
+  liCard.appendChild(mk('div', {cls:'card-hd', txt:'LINKEDIN CREDENTIALS'}));
+  const hasLI = U.data.linkedinEmail && U.data.linkedinPassword;
+  const liNotice = mk('div', {cls:'alert '+(hasLI?'alert-o':'alert-w'), css:'margin-bottom:14px'});
+  liNotice.textContent = hasLI ? '✓ LinkedIn connected — '+U.data.linkedinEmail : '⚠ Add your LinkedIn credentials to enable the agent';
+  liCard.appendChild(liNotice);
+  liCard.appendChild(mk('div', {css:'font-size:13px;color:var(--t2);margin-bottom:12px;line-height:1.6', txt:'The agent logs into LinkedIn using your credentials to search and apply to matching jobs on your behalf.'}));
+  let newEmail = U.data.linkedinEmail || '';
+  let newPass  = '';
+  const ef = fld('LinkedIn Email', newEmail, v => newEmail=v, {ph:'your@linkedin-email.com', type:'email'});
+  const pf = fld('LinkedIn Password', '', v => newPass=v, {ph:'Your LinkedIn password', type:'password', help:'Stored encrypted. Only used by our agent to log in and apply.'});
+  liCard.appendChild(ef); liCard.appendChild(pf);
+  const liSave = mk('button', {cls:'btn btn-p', txt:'Save credentials'});
+  liSave.onclick = async () => {
+    const e = ef.querySelector('input').value.trim();
+    const p = pf.querySelector('input').value;
+    if (!e||!p) { alert('Please enter both email and password.'); return; }
+    liSave.disabled=true; liSave.textContent='Saving…';
+    await saveUser({linkedinEmail:e, linkedinPassword:btoa(unescape(encodeURIComponent(p)))});
+    liNotice.className='alert alert-o'; liNotice.textContent='✓ LinkedIn connected — '+e;
+    liSave.textContent='✓ Saved!';
+    setTimeout(()=>{liSave.textContent='Save credentials';liSave.disabled=false;},2000);
+  };
+  liCard.appendChild(liSave);
+  sec.appendChild(liCard);
+
+  // ── Match threshold ─────────────────────────────────────────
+  const thCard = mk('div', {cls:'card', css:'margin-bottom:1.25rem'});
+  thCard.appendChild(mk('div', {cls:'card-hd', txt:'AI MATCH THRESHOLD'}));
+  thCard.appendChild(mk('div', {css:'font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.6', txt:'The agent scores each job (0–100%) based on how well it matches your profile. It only applies if the score meets this threshold. Higher = more selective, fewer but better applications.'}));
+  const thresh = U.data.agentMatchThreshold || 80;
+  const tRow = mk('div', {css:'display:flex;align-items:center;gap:16px;margin-bottom:8px'});
+  const tSlider = mk('input', {type:'range', min:'50', max:'95', step:'5', css:'flex:1'});
+  tSlider.value = thresh;
+  const tVal = mk('div', {css:'font-size:24px;font-weight:800;color:var(--p3);min-width:60px;text-align:right', txt:thresh+'%'});
+  tSlider.oninput = e => { tVal.textContent = e.target.value+'%'; };
+  tRow.appendChild(tSlider); tRow.appendChild(tVal); thCard.appendChild(tRow);
+  const tDesc = mk('div', {css:'font-size:12px;color:var(--t3);margin-bottom:12px'});
+  tDesc.textContent = 'Recommended: 75–85% for best balance of quantity and quality.';
+  thCard.appendChild(tDesc);
+  const thSave = mk('button', {cls:'btn btn-sm btn-p', txt:'Save threshold'});
+  thSave.onclick = async () => {
+    const val = parseInt(tSlider.value);
+    thSave.disabled=true; thSave.textContent='Saving…';
+    await saveUser({agentMatchThreshold:val});
+    thSave.textContent='✓ Saved!'; setTimeout(()=>{thSave.textContent='Save threshold';thSave.disabled=false;},2000);
+  };
+  thCard.appendChild(thSave);
+  sec.appendChild(thCard);
+
+  // ── Schedule ────────────────────────────────────────────────
+  const schCard = mk('div', {cls:'card', css:'margin-bottom:1.25rem'});
+  schCard.appendChild(mk('div', {cls:'card-hd', txt:'AUTOMATION SCHEDULE'}));
+  schCard.appendChild(mk('div', {css:'font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.6', txt:'Set when the agent should automatically search and apply. Uses credits each run.'}));
+  schCard.appendChild(mk('div', {cls:'lbl', txt:'FREQUENCY'}));
+  const freqRow = mk('div', {css:'display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap'});
+  let curFreq = U.data.schedule?.frequency || 'off';
+  ['off','daily','weekly'].forEach(f => {
+    const b = mk('button', {cls:'tb'+(curFreq===f?' on':''), txt:f==='off'?'Off':f==='daily'?'Daily':'Weekly'});
+    b.dataset.freq = f;
+    b.onclick = () => {
+      document.querySelectorAll('[data-freq]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on'); curFreq=f; showOpts(f);
+    };
+    freqRow.appendChild(b);
+  });
+  schCard.appendChild(freqRow);
+  const optWrap = mk('div', {css:'display:'+(curFreq==='off'?'none':'block')+';border-top:1.5px solid var(--bd);padding-top:16px'});
+
+  function showOpts(f) {
+    optWrap.innerHTML='';
+    if (f==='off') { optWrap.style.display='none'; return; }
+    optWrap.style.display='block';
+    if (f==='weekly') {
+      optWrap.appendChild(mk('div', {cls:'lbl', txt:'DAYS OF WEEK'}));
+      const dRow = mk('div', {css:'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px'});
+      const savedDays = U.data.schedule?.days || [];
+      ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(day => {
+        const b = mk('button', {cls:'tb'+(savedDays.includes(day)?' on':''), txt:day});
+        b.dataset.day=day; b.onclick=()=>b.classList.toggle('on');
+        dRow.appendChild(b);
+      });
+      optWrap.appendChild(dRow);
+    }
+    optWrap.appendChild(mk('div', {cls:'lbl', txt:'RUN TIME (YOUR LOCAL TIME)'}));
+    const tRow = mk('div', {css:'display:flex;align-items:center;gap:10px;margin-bottom:16px'});
+    const timeInp = mk('input', {type:'time', id:'agt-time', css:'width:140px'});
+    timeInp.value = U.data.schedule?.time || '09:00';
+    tRow.appendChild(timeInp); tRow.appendChild(mk('div', {css:'font-size:13px;color:var(--t3)', txt:'local time'}));
+    optWrap.appendChild(tRow);
+    optWrap.appendChild(mk('div', {cls:'lbl', txt:'MAX APPLICATIONS PER RUN'}));
+    const mRow = mk('div', {css:'display:flex;align-items:center;gap:12px;margin-bottom:16px'});
+    const mSlider = mk('input', {type:'range', min:'1', max:'20', id:'agt-max', css:'flex:1'});
+    mSlider.value = U.data.schedule?.maxPerRun || 5;
+    const mVal = mk('div', {css:'font-size:20px;font-weight:800;color:var(--p3);min-width:50px;text-align:right', txt:(U.data.schedule?.maxPerRun||5)+' apps'});
+    mSlider.oninput = e => mVal.textContent = e.target.value+' apps';
+    mRow.appendChild(mSlider); mRow.appendChild(mVal); optWrap.appendChild(mRow);
+    const saveSchBtn = mk('button', {cls:'btn btn-p', txt:'Save Schedule'});
+    saveSchBtn.onclick = async () => {
+      const days = f==='weekly' ? [...document.querySelectorAll('[data-day].on')].map(b=>b.dataset.day) : [];
+      const schedule = {frequency:f, time:$('agt-time')?.value||'09:00', days, maxPerRun:parseInt($('agt-max')?.value||5), enabled:f!=='off', updatedAt:Date.now()};
+      saveSchBtn.disabled=true; saveSchBtn.textContent='Saving…';
+      await saveUser({schedule}); saveSchBtn.textContent='✓ Schedule saved!';
+      setTimeout(()=>{saveSchBtn.textContent='Save Schedule';saveSchBtn.disabled=false;},2000);
+    };
+    optWrap.appendChild(saveSchBtn);
+  }
+
+  schCard.appendChild(optWrap);
+  if (curFreq!=='off') showOpts(curFreq);
+  sec.appendChild(schCard);
+
+  // ── Control ─────────────────────────────────────────────────
+  const ctrlCard = mk('div', {cls:'card', css:'margin-bottom:1.25rem'});
+  ctrlCard.appendChild(mk('div', {cls:'card-hd', txt:'AGENT CONTROL'}));
+  const agSt = U.data.agentStatus || 'idle';
+  const stColors = {running:'var(--gn)',idle:'var(--t3)',error:'var(--rd)',paused:'var(--am)'};
+  const stDiv = mk('div', {css:'display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:14px;background:var(--bg3);border-radius:var(--rs);border:1.5px solid var(--bd)'});
+  const dot = mk('span', {css:'width:10px;height:10px;border-radius:50%;background:'+(stColors[agSt]||'var(--t3)')+';display:inline-block;flex-shrink:0'+(agSt==='running'?';box-shadow:0 0 10px var(--gn)':'')});
+  const stTxt = mk('div');
+  stTxt.innerHTML = '<div style="font-size:14px;font-weight:700;color:var(--t)">'+(agSt==='running'?'Agent is actively applying':'agSt'==='paused'?'Agent paused':agSt==='error'?'Agent error':'Agent idle')+'</div><div style="font-size:12px;color:var(--t3);margin-top:2px">'+(U.data.agentLastAction||'Waiting for command or schedule')+'</div>';
+  stDiv.appendChild(dot); stDiv.appendChild(stTxt); ctrlCard.appendChild(stDiv);
+
+  const btnRow = mk('div', {css:'display:flex;gap:10px;flex-wrap:wrap'});
+  const startBtn = mk('button', {cls:'btn btn-p', css:'flex:1;padding:12px'});
+  startBtn.textContent = U.data.agentEnabled ? '🔄 Restart Agent' : '🚀 Start Agent';
+  startBtn.onclick = async () => {
+    if (!U.data.linkedinEmail||!U.data.linkedinPassword) { alert('Please add your LinkedIn credentials first.'); return; }
+    if (!U.data.criteria?.jobTitles) { alert('Please set your job titles in Job Preferences first.'); return; }
+    startBtn.disabled=true; startBtn.textContent='Starting…';
+    await saveUser({agentEnabled:true, agentStatus:'queued', agentLastAction:'Queued — agent will start within 60 seconds', agentQueuedAt:Date.now()});
+    startBtn.textContent='✓ Agent queued!'; updateSidebar();
+    setTimeout(()=>{startBtn.textContent=U.data.agentEnabled?'🔄 Restart Agent':'🚀 Start Agent';startBtn.disabled=false;},3000);
+  };
+  const applyNowBtn = mk('button', {cls:'btn', css:'flex:1;padding:12px', txt:'▶ Apply Right Now'});
+  applyNowBtn.onclick = async () => {
+    if (!U.data.linkedinEmail||!U.data.linkedinPassword) { alert('Please add your LinkedIn credentials first.'); return; }
+    applyNowBtn.disabled=true; applyNowBtn.textContent='Queuing…';
+    await saveUser({agentCommand:'apply_now', agentCommandAt:Date.now()});
+    applyNowBtn.textContent='✓ Command sent!'; setTimeout(()=>{applyNowBtn.textContent='▶ Apply Right Now';applyNowBtn.disabled=false;},3000);
+  };
+  btnRow.appendChild(startBtn); btnRow.appendChild(applyNowBtn);
+  if (U.data.agentEnabled) {
+    const stopBtn = mk('button', {cls:'btn btn-rd', css:'padding:12px', txt:'⏹ Stop'});
+    stopBtn.onclick = async () => {
+      if (!confirm('Stop the agent?')) return;
+      await saveUser({agentEnabled:false, agentStatus:'idle', agentLastAction:'Stopped by user'});
+      updateSidebar(); renderTab();
+    };
+    btnRow.appendChild(stopBtn);
+  }
+  ctrlCard.appendChild(btnRow);
+
+  // Specific job
+  const specDiv = mk('div', {css:'margin-top:16px;padding-top:16px;border-top:1.5px solid var(--bd)'});
+  specDiv.appendChild(mk('div', {cls:'lbl', txt:'APPLY TO A SPECIFIC JOB'}));
+  specDiv.appendChild(mk('div', {css:'font-size:12px;color:var(--t3);margin-bottom:10px', txt:'Paste any job description — agent finds and applies to that exact position, regardless of match threshold.'}));
+  const specTA = mk('textarea', {rows:'4', placeholder:'Paste a job description from LinkedIn, Indeed, or any job site…'});
+  specDiv.appendChild(specTA);
+  const specBtn = mk('button', {cls:'btn btn-p', css:'margin-top:8px', txt:'📤 Send to Agent'});
+  specBtn.onclick = async () => {
+    const txt=specTA.value.trim();
+    if (!txt) { alert('Please paste a job description.'); return; }
+    specBtn.disabled=true; specBtn.textContent='Sending…';
+    await saveUser({agentCommand:'apply_specific:'+txt, agentCommandAt:Date.now()});
+    specTA.value=''; specBtn.textContent='✓ Sent!'; setTimeout(()=>{specBtn.textContent='📤 Send to Agent';specBtn.disabled=false;},3000);
+  };
+  specDiv.appendChild(specBtn); ctrlCard.appendChild(specDiv);
+  sec.appendChild(ctrlCard);
+
+  // Stats
+  const allApps = U.data.apps || [];
+  const agApps  = allApps.filter(a=>a.source==='agent');
+  const statsCard = mk('div', {cls:'card'});
+  statsCard.appendChild(mk('div', {cls:'card-hd', txt:'AGENT STATS'}));
+  statsCard.innerHTML += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px"><div class="stat"><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Auto-applied</div><div style="font-size:22px;font-weight:800;color:var(--t)">'+agApps.length+'</div></div><div class="stat"><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Interviews</div><div style="font-size:22px;font-weight:800;color:var(--gn)">'+agApps.filter(a=>a.status==='interview').length+'</div></div><div class="stat"><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Offers</div><div style="font-size:22px;font-weight:800;color:var(--am)">'+agApps.filter(a=>a.status==='offer').length+'</div></div></div>';
+  const syncBtn = mk('button', {cls:'btn btn-sm btn-p', txt:'↓ Sync latest applications'});
+  syncBtn.onclick = async () => {
+    syncBtn.disabled=true; syncBtn.textContent='Syncing…';
+    const n = await syncAgentApps();
+    syncBtn.textContent=n>0?'✓ '+n+' new synced':'Already up to date';
+    updateUsageBar(); updateSidebarCredits();
+    setTimeout(()=>{syncBtn.textContent='↓ Sync latest applications';syncBtn.disabled=false;},3000);
+  };
+  statsCard.appendChild(syncBtn);
+  sec.appendChild(statsCard);
+  m.appendChild(sec);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONTACT SUPPORT
+// ═══════════════════════════════════════════════════════════════
+function pgContact() {
+  const m = $('main-area');
+  const sec = mk('div', {cls:'sec'});
+  sec.appendChild(mk('div', {cls:'sec-h', txt:'Contact Support'}));
+  sec.appendChild(mk('div', {cls:'sec-s', txt:'Have a question or problem? We\'re here to help.'}));
+
+  const card = mk('div', {cls:'card', css:'max-width:560px'});
+  card.appendChild(mk('div', {css:'font-size:13px;color:var(--t2);margin-bottom:1.25rem;line-height:1.7', txt:'Send us a message and we\'ll get back to you within 24 hours. For urgent issues, email rwandatacenter@gmail.com directly.'}));
+
+  let subject='', body='';
+  const subjectEl = fld('Subject', subject, v=>subject=v, {ph:'e.g. Issue with agent, credit question, etc.'});
+  const bodyEl = fld('Your message', body, v=>body=v, {rows:6, ph:'Describe your issue or question in detail…'});
+  card.appendChild(subjectEl); card.appendChild(bodyEl);
+
+  const st = mk('div', {css:'margin-top:1rem'});
+  const sendBtn = mk('button', {cls:'btn btn-p', css:'padding:12px 28px', txt:'Send Message'});
+  sendBtn.onclick = async () => {
+    const sub = subjectEl.querySelector('input').value.trim();
+    const msg = bodyEl.querySelector('textarea').value.trim();
+    if (!sub||!msg) { st.innerHTML='<div class="alert alert-w">Please fill in both subject and message.</div>'; return; }
+    sendBtn.disabled=true; sendBtn.textContent='Sending…';
+    try {
+      await db.ref('contact_messages').push({
+        uid: U.user.uid,
+        name: U.data.name||'',
+        email: U.data.email||U.user.email||'',
+        subject: sub,
+        message: msg,
+        createdAt: Date.now()
+      });
+      st.innerHTML='<div class="alert alert-o">✓ Message sent! We\'ll reply to '+U.user.email+' within 24 hours.</div>';
+      subjectEl.querySelector('input').value='';
+      bodyEl.querySelector('textarea').value='';
+    } catch(e) {
+      st.innerHTML='<div class="alert alert-e">Failed to send. Please email rwandatacenter@gmail.com directly.</div>';
+    }
+    sendBtn.textContent='Send Message'; sendBtn.disabled=false;
+  };
+  card.appendChild(sendBtn); card.appendChild(st);
+
+  const altCard = mk('div', {cls:'card', css:'max-width:560px;margin-top:1.25rem;background:var(--bg3)'});
+  altCard.innerHTML = '<div class="card-hd">OTHER WAYS TO REACH US</div><div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:13px;color:var(--t2)">📧 Email: <a href="mailto:rwandatacenter@gmail.com">rwandatacenter@gmail.com</a></div><div style="font-size:13px;color:var(--t2)">⏱ Response time: within 24 hours</div><div style="font-size:13px;color:var(--t2)">🕒 Support hours: Monday–Friday, 9am–6pm CET</div></div>';
+  sec.appendChild(card); sec.appendChild(altCard); m.appendChild(sec);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACCOUNT
+// ═══════════════════════════════════════════════════════════════
+function pgAcct() {
+  const m = $('main-area');
+  const sec = mk('div', {cls:'sec'});
+  sec.appendChild(mk('div', {cls:'sec-h', txt:'Account'}));
+  sec.appendChild(mk('div', {cls:'sec-s', txt:'Your profile and credits'}));
+  const wrap = mk('div', {css:'max-width:500px;display:flex;flex-direction:column;gap:1.25rem'});
+  const cr = getCredits();
+  const ac = mk('div', {cls:'card'});
+  ac.appendChild(mk('div', {cls:'card-hd', txt:'YOUR ACCOUNT'}));
+  ac.innerHTML += '<div style="font-size:17px;font-weight:800;color:var(--t);margin-bottom:4px;letter-spacing:-.02em">'+(U.data.name||'')+'</div><div style="font-size:13px;color:var(--t3);margin-bottom:2px">'+U.user.email+'</div>'+(U.data.phone?'<div style="font-size:13px;color:var(--gn);margin-bottom:16px">📱 '+U.data.phone+' · verified</div>':'<div style="margin-bottom:16px"></div>');
+  const crBox = mk('div', {css:'padding:12px 16px;background:var(--bg3);border:1.5px solid var(--bd);border-radius:var(--r);margin-bottom:14px'});
+  crBox.innerHTML = '<div style="font-size:11px;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px">APPLICATION CREDITS</div><div style="font-size:32px;font-weight:800;color:'+(cr>0?'var(--p3)':'var(--rd)')+';letter-spacing:-.02em">'+cr+'</div><div style="font-size:12px;color:var(--t3);margin-top:4px">credits remaining · never expire</div>';
+  ac.appendChild(crBox);
+  const sob = mk('button', {cls:'btn btn-rd btn-sm', txt:'Sign out'});
+  sob.onclick = () => { if (confirm('Sign out?')) doSignOut(); };
+  ac.appendChild(sob); wrap.appendChild(ac);
+  if (cr < 10) {
+    const uc = mk('div', {cls:'card', css:'border-color:var(--p)'});
+    uc.innerHTML = '<div style="font-size:14px;font-weight:700;color:var(--t);margin-bottom:8px">Buy more credits</div><p style="font-size:13px;color:var(--t2);margin-bottom:14px;line-height:1.7">Credits never expire. More credits = lower price per application.</p>';
+    const ub = mk('button', {cls:'btn btn-p', txt:'See pricing →'});
+    ub.onclick = () => pg('pg-price');
+    uc.appendChild(ub); wrap.appendChild(uc);
+  }
+  sec.appendChild(wrap); m.appendChild(sec);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════════════════════════════
+async function loadAdmin() {
+  pg('pg-admin');
+  try {
+    const snap = await db.ref('users').get();
+    const users = snap.exists() ? Object.values(snap.val()||{}) : [];
+    const totalApps = users.reduce((s,u) => s+(u.appsUsed||0), 0);
+    const active = users.filter(u=>u.agentEnabled&&u.agentStatus==='running').length;
+    const st = $('adm-stats'); st.innerHTML='';
+    [['Users',users.length,'var(--bl)'],['Active Agents',active,'var(--gn)'],['Apps Generated',totalApps,'var(--p3)'],['Phone Verified',users.filter(u=>u.phoneVerified).length,'var(--am)']].forEach(([l,v,c])=>{
+      const ms = mk('div',{cls:'adm-stat'});
+      ms.innerHTML='<div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">'+l+'</div><div style="font-size:28px;font-weight:800;color:'+c+'">'+v+'</div>';
+      st.appendChild(ms);
+    });
+    const ul = $('adm-users');
+    ul.innerHTML='<div class="card-hd">USERS (newest first)</div>';
+    users.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,30).forEach(u=>{
+      const row=mk('div',{css:'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1.5px solid var(--bd)'});
+      row.innerHTML='<div><div style="font-size:13px;color:var(--t);">'+(u.name||u.email)+'</div><div style="font-size:11px;color:var(--t3)">'+u.email+(u.phone?' · '+u.phone:'')+' · '+(u.appsUsed||0)+' apps · '+(u.purchasedCredits||0)+' credits bought</div></div>';
+      const right=mk('div',{css:'display:flex;align-items:center;gap:8px'});
+      right.innerHTML='<span style="font-size:10px;color:'+(u.phoneVerified?'var(--gn)':'var(--rd)')+'"> '+(u.phoneVerified?'📱 verified':'⚠')+'</span><span style="font-size:10px;color:'+(u.agentEnabled&&u.agentStatus==='running'?'var(--gn)':'var(--t3)')+'">'+(u.agentEnabled?'● '+u.agentStatus:'○ idle')+'</span>';
+      row.appendChild(right); ul.appendChild(row);
+    });
+    // Contact messages
+    const msgSnap = await db.ref('contact_messages').orderByChild('createdAt').limitToLast(10).get();
+    const msgEl = $('adm-msgs');
+    msgEl.innerHTML = '<div class="card-hd">CONTACT MESSAGES</div>';
+    if (msgSnap.exists()) {
+      const msgs = Object.values(msgSnap.val()||{}).sort((a,b)=>b.createdAt-a.createdAt);
+      msgs.forEach(msg => {
+        const r=mk('div',{css:'padding:10px 0;border-bottom:1.5px solid var(--bd)'});
+        r.innerHTML='<div style="font-size:13px;font-weight:600;color:var(--t)">'+msg.subject+'</div><div style="font-size:11px;color:var(--t3);margin:2px 0">'+msg.name+' · '+msg.email+' · '+new Date(msg.createdAt).toLocaleDateString()+'</div><div style="font-size:13px;color:var(--t2);margin-top:4px">'+msg.message+'</div>';
+        msgEl.appendChild(r);
+      });
+    } else {
+      msgEl.innerHTML += '<div style="color:var(--t3);font-size:13px">No messages yet.</div>';
+    }
+    const pc = await db.ref('platform_config').get();
+    if (pc.exists()) {
+      const cfg=pc.val();
+      if(cfg.proxyUrl)$('adm-proxy').value=cfg.proxyUrl;
+      if(cfg.stripeP50)$('adm-p50').value=cfg.stripeP50;
+      if(cfg.stripeP120)$('adm-p120').value=cfg.stripeP120;
+      if(cfg.stripeCustom)$('adm-pcustom').value=cfg.stripeCustom;
+      if(cfg.announcement)$('adm-msg').value=cfg.announcement;
+    }
+  } catch(e) { console.error('Admin error:',e); }
+}
+
+async function saveAdmCfg() {
+  const cfg = {proxyUrl:$('adm-proxy').value, stripeP50:$('adm-p50').value, stripeP120:$('adm-p120').value, stripeCustom:$('adm-pcustom').value, announcement:$('adm-msg').value};
+  await db.ref('platform_config').set(cfg); U.cfg=cfg;
+  $('adm-ok').style.display='inline'; setTimeout(()=>$('adm-ok').style.display='none',3000);
+}
+
+async function grantCredits() {
+  const email=$('adm-uemail').value.trim(), credits=parseInt($('adm-ucredits').value)||0;
+  if (!email||!credits) return;
+  const snap=await db.ref('users').orderByChild('email').equalTo(email).get();
+  if (!snap.exists()) { alert('User not found: '+email); return; }
+  const uid=Object.keys(snap.val())[0]; const user=snap.val()[uid];
+  await db.ref('users/'+uid).update({purchasedCredits:(user.purchasedCredits||0)+credits});
+  alert('✓ Added '+credits+' credits to '+email);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AUTH STATE OBSERVER
+// ═══════════════════════════════════════════════════════════════
+auth.onAuthStateChanged(async user => {
+  if (user) {
+    U.user = user;
+    await loadCfg();
+    const userData = await getUser(user.uid);
+    if (!userData) {
+      // User authenticated but no DB record — sign out
+      await auth.signOut();
+      return;
+    }
+    U.data = userData;
+    if (user.email === ADMIN && window.location.hash === '#admin') {
+      loadAdmin(); return;
+    }
+    const hasProfile = userData.profile?.personal?.name || (userData.profile?.experience||[]).length>0;
+    if (!hasProfile) { startOB(); } else { openApp(); }
+  } else {
+    U.user = null; U.data = null;
+    if (agentPollTimer) { clearInterval(agentPollTimer); agentPollTimer=null; }
+    pg('pg-land');
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════════════════════
+$('sb-nav').addEventListener('click', e => {
+  const b = e.target.closest('.nb');
+  if (b && b.dataset.t) setTab(b.dataset.t);
+});
+
+$('mob-nav').addEventListener('click', e => {
+  const b = e.target.closest('.mobile-nb');
+  if (b && b.dataset.t) setTab(b.dataset.t);
+});
+
+window.addEventListener('hashchange', () => {
+  if (window.location.hash==='#admin' && U.user?.email===ADMIN) loadAdmin();
+});
+
+// Init custom pricing slider
+setTimeout(calcCustom, 100);
+
+// Show landing page
+pg('pg-land');
+</script>
+</body>
+</html>
